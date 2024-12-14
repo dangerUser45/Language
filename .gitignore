@@ -1,0 +1,7 @@
+*.exe
+*.o
+*.log
+*.dmp
+*.html
+*.txt
+/build_language

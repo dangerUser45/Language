@@ -3,24 +3,29 @@ B        = build_language/
 Target   = Language
 #-----------------------------------------------------------------------
 
-$(Target):      $(B)Language_Main.o $(B)Language_Init.o $(B)Lexical_analyzer.o $(B)Print.o $(B)Processing.o $(B)TxLib.o
-	$(Compiler) $(B)Language_Main.o $(B)Language_Init.o $(B)Lexical_analyzer.o $(B)Print.o $(B)Processing.o $(B)TxLib.o -o Lang.exe
+$(Target):      $(B)Main_Language.o $(B)Init_Language.o $(B)Dump_Language.o $(B)Lexical_analyzer.o $(B)Print.o $(B)Processing.o $(B)TxLib.o
+	$(Compiler) $(B)Main_Language.o $(B)Init_Language.o $(B)Dump_Language.o $(B)Lexical_analyzer.o $(B)Print.o $(B)Processing.o $(B)TxLib.o -o Lang.exe
 #-----------------------------------------------------------------------
 
-$(B)Language_Main.o : Language_Main.cpp                           \
-				LanguageCommon.h                                  \
-				Language_init.h
-	$(Compiler) -c Language_Main.cpp -o $(B)Language_Main.o
+$(B)Main_Language.o : Main_Language.cpp                           \
+				Common_Language.h                                 \
+				Init_Language.h
+	$(Compiler) -c Main_Language.cpp -o $(B)Main_Language.o
 
-$(B)Language_Init.o : Language_Init.cpp                           \
+$(B)Init_Language.o : Init_Language.cpp                           \
 				..\Processor\Onegin_for_proc\Onegin_processing.h  \
 				..\Processor\Onegin_for_proc\Onegin_General.h     \
 				..\Processor\Onegin_for_proc\Print.h              \
-				Language_Init.h                                   
-	$(Compiler) -c Language_Init.cpp -o $(B)Language_Init.o
+				Init_Language.h
+	$(Compiler) -c Init_Language.cpp -o $(B)Init_Language.o
+
+$(B)Dump_Language.o : Dump_Language.cpp                           \
+				Common_Language.h                                 \
+				Init_Language.h
+	$(Compiler) -c Dump_Language.cpp -o $(B)Dump_Language.o
 
 $(B)Lexical_analyzer.o :Lexical_analyzer.cpp                      \
-				LanguageCommon.h                                  \
+				Common_Language.h                                \
 				Lexical_analyzer.h
 	$(Compiler) -c Lexical_analyzer.cpp -o $(B)Lexical_analyzer.o
 
