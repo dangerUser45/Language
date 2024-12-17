@@ -72,3 +72,193 @@ Run file:	D:\GitHub\Language\lang.exe
 Directory:	D:\GitHub\Language
 
 --------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: D:\GitHub\Language\lang.exe,
+
+ВНЕЗАПНО: signal (22, 0x00): SIGABRT: Аварийное завершение программы, вызвана функция abort(). 
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#1: TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400], Instance: 0x00007FF66BD804C8 (64-bit), Flags: Cmdre0, Thread: 0x500 (Main), errno: 22 (Invalid argument), _doserrno: 123 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00007FF66BC1C799 in D:\GitHub\Language\lang.exe: TX::_txError()
+# 1 0x00007FF66BC1CAAB in D:\GitHub\Language\lang.exe: TX::_txOnSignal()
+# 2 0x00007FFC3D27ADFB in C:\Windows\System32\msvcrt.dll: raise()
+# 3 0x00007FFC3D27F1FB in C:\Windows\System32\msvcrt.dll: abort()
+# 4 0x00007FFC3D27BBC5 in C:\Windows\System32\msvcrt.dll: assert()
+# 5 0x00007FF66BC11D2B in D:\GitHub\Language\lang.exe: Read_File()
+# 6 0x00007FF66BC115D3 in D:\GitHub\Language\lang.exe: Language_init()
+# 7 0x00007FF66BC11472 in D:\GitHub\Language\lang.exe: main()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	..\SuperLibs\TXLib.h
+Compiled:	Dec 13 2024 21:41:42, GNU g++ 13.2.0, std=201703L, MinGW-W64 Runtime 11.0.1 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 13 2024 21:56:55
+
+Run file:	D:\GitHub\Language\lang.exe
+Directory:	D:\GitHub\Language
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: D:\GitHub\Language\lang.exe,
+
+ВНЕЗАПНО: Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x00007FFC3D2AD2F1 в функции strlen(). Попытка прочесть данные по адресу 0xFFFFFFFFFFFFFFFF в модуле C:\Windows\System32\msvcrt.dll. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+#1: TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400], Instance: 0x00007FF6926424C8 (64-bit), Flags: Cmdre0, Thread: 0xBE4 (Main), errno: 2 (No such file or directory), _doserrno: 3 (No such process). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00007FFC3D2AD2F1 in C:\Windows\System32\msvcrt.dll: strlen()
+# 2 0x00007FF69250C3EF in D:\GitHub\Language\lang.exe: __mingw_pformat() at E:/temp/gcc/build-mingw-w64/mingw-w64-crt/../../src/mingw-w64-crt/stdio/mingw_pformat.c (2573)
+# 3 0x00007FF692507B1D in D:\GitHub\Language\lang.exe: __mingw_vfprintf() at E:/temp/gcc/build-mingw-w64/mingw-w64-crt/../../src/mingw-w64-crt/stdio/mingw_vfprintf.c (54)
+# 4 0x00007FF69251A377 in D:\GitHub\Language\lang.exe: printf()
+# 5 0x00007FF6924D23DA in D:\GitHub\Language\lang.exe: Lexical_analyzer()
+# 6 0x00007FF6924D14BC in D:\GitHub\Language\lang.exe: main()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	..\SuperLibs\TXLib.h
+Compiled:	Dec 16 2024 05:35:47, GNU g++ 13.2.0, std=201703L, MinGW-W64 Runtime 11.0.1 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 17 2024 19:23:04
+
+Run file:	D:\GitHub\Language\lang.exe
+Directory:	D:\GitHub\Language
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: D:\GitHub\Language\lang.exe,
+
+ВНЕЗАПНО: signal (11, 0x00): SIGSEGV: Доступ по неверному указателю. Ставьте ассерты! 
+
+Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x00007FFC3D2AD2F1 в функции strlen(). Попытка прочесть данные по адресу 0xFFFFFFFFFFFFFFFF в модуле C:\Windows\System32\msvcrt.dll. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400], Instance: 0x00007FF6926424C8 (64-bit), Flags: Cmdre0, Thread: 0xBE4 (Main), errno: 2 (No such file or directory), _doserrno: 3 (No such process). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00007FFC3D2AD2F1 in C:\Windows\System32\msvcrt.dll: strlen()
+# 2 0x00007FF69250C3EF in D:\GitHub\Language\lang.exe: __mingw_pformat() at E:/temp/gcc/build-mingw-w64/mingw-w64-crt/../../src/mingw-w64-crt/stdio/mingw_pformat.c (2573)
+# 3 0x00007FF692507B1D in D:\GitHub\Language\lang.exe: __mingw_vfprintf() at E:/temp/gcc/build-mingw-w64/mingw-w64-crt/../../src/mingw-w64-crt/stdio/mingw_vfprintf.c (54)
+# 4 0x00007FF69251A377 in D:\GitHub\Language\lang.exe: printf()
+# 5 0x00007FF6924D23DA in D:\GitHub\Language\lang.exe: Lexical_analyzer()
+# 6 0x00007FF6924D14BC in D:\GitHub\Language\lang.exe: main()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	..\SuperLibs\TXLib.h
+Compiled:	Dec 16 2024 05:35:47, GNU g++ 13.2.0, std=201703L, MinGW-W64 Runtime 11.0.1 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 17 2024 19:23:04
+
+Run file:	D:\GitHub\Language\lang.exe
+Directory:	D:\GitHub\Language
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: D:\GitHub\Language\lang.exe,
+
+ВНЕЗАПНО: Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x00007FFC3D2AD2F1. Попытка прочесть данные по адресу 0x0000000000000008 в модуле C:\Windows\System32\msvcrt.dll. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+#1: TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400], Instance: 0x00007FF6531524C8 (64-bit), Flags: Cmdre0, Thread: 0xC14 (Main), GetLastError(): 131 (Попытка поместить указатель на файл перед началом файла), errno: 22 (Invalid argument), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	..\SuperLibs\TXLib.h
+Compiled:	Dec 16 2024 05:35:47, GNU g++ 13.2.0, std=201703L, MinGW-W64 Runtime 11.0.1 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 17 2024 22:12:34
+
+Run file:	D:\GitHub\Language\lang.exe
+Directory:	D:\GitHub\Language
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: D:\GitHub\Language\lang.exe,
+
+ВНЕЗАПНО: signal (11, 0x00): SIGSEGV: Доступ по неверному указателю. Ставьте ассерты! 
+
+Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x00007FFC3D2AD2F1. Попытка прочесть данные по адресу 0x0000000000000008 в модуле C:\Windows\System32\msvcrt.dll. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400], Instance: 0x00007FF6531524C8 (64-bit), Flags: Cmdre0, Thread: 0xC14 (Main), GetLastError(): 131 (Попытка поместить указатель на файл перед началом файла), errno: 22 (Invalid argument), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 173, Date: 2024-06-23 22:37:05 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	..\SuperLibs\TXLib.h
+Compiled:	Dec 16 2024 05:35:47, GNU g++ 13.2.0, std=201703L, MinGW-W64 Runtime 11.0.1 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 17 2024 22:12:34
+
+Run file:	D:\GitHub\Language\lang.exe
+Directory:	D:\GitHub\Language
+
+--------------------------------------------------

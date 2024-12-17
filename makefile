@@ -3,8 +3,8 @@ B        = build_language/
 Target   = Language
 #-----------------------------------------------------------------------
 
-$(Target):      $(B)Main_Language.o $(B)Init_Language.o $(B)Dump_Language.o $(B)Lexical_analyzer.o $(B)Print.o $(B)Processing.o $(B)TxLib.o
-	$(Compiler) $(B)Main_Language.o $(B)Init_Language.o $(B)Dump_Language.o $(B)Lexical_analyzer.o $(B)Print.o $(B)Processing.o $(B)TxLib.o -o Lang.exe
+$(Target):      $(B)Main_Language.o $(B)Init_Language.o $(B)Dump_Language.o $(B)Lexical_analyzer.o $(B)Print.o $(B)Processing.o #$(B)TxLib.o
+	$(Compiler) $(B)Main_Language.o $(B)Init_Language.o $(B)Dump_Language.o $(B)Lexical_analyzer.o $(B)Print.o $(B)Processing.o -o Lang.exe
 #-----------------------------------------------------------------------
 
 $(B)Main_Language.o : Main_Language.cpp                           \

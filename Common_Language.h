@@ -3,10 +3,24 @@
 #include "..\Processor\Onegin_for_proc\Onegin_General.h" 
 
 enum type_t     {NUM = 1, ID, OP};
-enum operations {ADD = 1, SUB, MUL, DIV, COS, SIN, POW, LOG, LN, EXP, TAN, IF, EQUALS};
+enum operations { 
+    ADD    = 1,
+    SUB    = 2,
+    MUL    = 3, 
+    DIV    = 4, 
+    COS    = 5, 
+    SIN    = 6, 
+    POW    = 7, 
+    LOG    = 8, 
+    LN     = 9, 
+    EXP    = 10, 
+    TAN    = 11, 
+    IF     = 12,
+    EQUALS = 13  
+};
   
 #define TYPE "lg"
-#define SCALE 85
+#define SCALE 50
 #define LENGTH 256 
 
 const int MAX_NAME_ID = 64;

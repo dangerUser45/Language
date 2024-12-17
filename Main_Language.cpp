@@ -1,7 +1,7 @@
-#define TX_COMPILED
-#include "..\SuperLibs\TXLib.h"
+/*#define TX_COMPILED
+#include "..\SuperLibs\TXLib.h"*/
 
-#include "stdio.h"
+#include <stdio.h>
 #include "Common_Language.h"
 #include "Init_Language.h"
 #include "Lexical_analyzer.h"
@@ -11,8 +11,10 @@
 
 int main (int argc, char* argv[])
 {
+    //atexit ((void (*)())txDisableAutoPause);
+
     Language* language_data = Language_init (argc, argv);
-    $(language_data);
+    //$(language_data);
 
     Lexical_analyzer (language_data);
     DUMP (TOKEN_TABLE);

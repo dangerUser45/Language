@@ -1,5 +1,5 @@
-#define TX_COMPILED
-#include "..\SuperLibs\TXLib.h"
+/*#define TX_COMPILED
+#include "..\SuperLibs\TXLib.h"*/
 
 #include "Common_Language.h"
 #include "Init_language.h"
@@ -24,7 +24,7 @@ int Dump_graphviz_language (void* ptr, GRAPH_PRINT object_print)
     char* name_pic       = (char*) calloc (256, sizeof (char));
     char* name_cmd_dot   = (char*) calloc (256, sizeof (char));
 
-    snprintf (name_dot_utf_8, 256, "build_language/Dump_lang/Dot_UTF-8.txt_%zu", number_pic);
+    snprintf (name_dot_utf_8, 256, "build_language/Dump_lang/Dot_UTF-8_%zu.txt", number_pic);
     snprintf (name_cmd,       256, "dot build_language/Dump_lang/Dot_UTF-8_%zu.txt -Tsvg -o build_language/Dump_lang/dump_picture_%zu.svg", number_pic, number_pic);
     snprintf (name_pic,       256, "dump_picture_%zu.svg", number_pic);
     snprintf (name_cmd_dot,   256, "D:\\SOFT\\iconv\\gettext-iconv\\bin\\iconv.exe -f CP1251 -t UTF-8 build_language/Dump_lang/Dot.txt > %s", name_dot_utf_8);
@@ -32,7 +32,7 @@ int Dump_graphviz_language (void* ptr, GRAPH_PRINT object_print)
     Graph_File      = Create_file ("build_language/Dump_lang/Dot.txt");
     Graph_File_Utf8 = Create_file (name_dot_utf_8);
 
-    switch (object_print)  
+    switch (object_print)
     {
         case _NAME_TABLE:
         {
@@ -77,7 +77,7 @@ static void Dump_table_token (node* node_)
     "{\n"
     "\trankdir = LR;\n"
     "\tnode[color = \"#d69950\", shape = \"Mrecord\", style = \"filled\" ,fillcolor=\"#ddcdba\"];\n"
-    "\tedge[color = \"#364042\"];\n");                                                        
+    "\tedge[color = \"#000000\"];\n");                                                        
         
     for (int i = 0;  node_[i].type != 0; i++)
     {
@@ -91,10 +91,10 @@ static void Dump_table_token (node* node_)
 
         if (node_[i].type == ID)
         fprintf (Graph_File,  "" 
-    "\tnode_%p  [label= \" Type:\\n %s |  Value:\\n  %d | { Left:\\n %p| Right:\\n %p} \"];\n", node_ + i, "ID",  node_[i].value.id, node_[i].left, node_[i].right);
+    "\tnode_%p  [label= \" Type:\\n %s |  Value:\\n  %zu | { Left:\\n %p| Right:\\n %p} \"];\n", node_ + i, "ID",  node_[i].value.id, node_[i].left, node_[i].right);
     
     fprintf (Graph_File,  "" 
-            "\tsubgraph cluster_%p {node_%p; label = \"Number: %zu\nAddr: %p\"; color = \"white\";}\n\n", node_ + i, node_ + i, num_el, node_ + i);
+            "\tsubgraph cluster_%p {node_%p; label = \"Number: %zu\\n Addr: %p\"; color = \"white\";}\n\n", node_ + i, node_ + i, num_el, node_ + i);
     num_el++;
 //~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~
     if (node_[i+1].type == 0)
@@ -123,10 +123,10 @@ static void Dump_table_token (node* node_)
 
         if (node_[i+1].type == ID)
         fprintf (Graph_File,  "" 
-    "\tnode_%p  [label= \" Type:\\n %s |  Value:\\n  %d | { Left:\\n %p| Right:\\n %p} \"];\n", node_ + i + 1, "ID",  node_[i+1].value.id, node_[i+1].left, node_[i+1].right);
+    "\tnode_%p  [label= \" Type:\\n %s |  Value:\\n  %zu | { Left:\\n %p| Right:\\n %p} \"];\n", node_ + i + 1, "ID",  node_[i+1].value.id, node_[i+1].left, node_[i+1].right);
     
     fprintf (Graph_File,  "" 
-            "\tsubgraph cluster_%p {node_%p; label = \"Number: %zu\nAddr: %p\"; color = \"white\";}\n\n", node_ + i + 1, node_ + i + 1, num_el, node_ + i + 1);
+            "\tsubgraph cluster_%p {node_%p; label = \"Number: %zu\\n Addr: %p\"; color = \"white\";}\n\n", node_ + i + 1, node_ + i + 1, num_el, node_ + i + 1);
 
     fprintf (Graph_File, "\tnode_%p -> node_%p;\n\n", node_ + i, node_ + i + 1);
 
@@ -145,19 +145,19 @@ static void Dump_name_table (NAME_TABLE* name_table)
     fprintf (Graph_File, "digraph\n" 
     "{\n"
     "\trankdir = LR;\n"
-    "\tnode[color = \"#d69950\", shape = \"Mrecord\", style = \"filled\" ,fillcolor=\"#5c6d93\"];\n"
-    "\tedge[color = \"#d18166\"];\n");                                                        
+    "\tnode[color = \"#3c4966\", shape = \"Mrecord\", style = \"filled\" ,fillcolor=\"#8099d0\"];\n"
+    "\tedge[color = \"#000000\"];\n\n");                                                        
         
     for (int i = 0; strcmp (name_table[i].name_id, "\0"); i++)
     {
         fprintf (Graph_File,  "" 
-    "\tnode_%p  [label= \" Number:\\n %zu |  Value:\\n %s \"];\n", name_table + i, counter , name_table[i].name_id);
+    "\tnode_%p  [label = \" Value:\\n \\\"%s\\\" \"];\n", name_table + i, name_table[i].name_id);
 
-    fprintf (Graph_File,  "" 
-            "\tsubgraph cluster_%p {name_table%p; label = \"Addr: %p\"; color = \"white\";}\n\n", name_table + i, name_table + i, name_table + i);
+    fprintf (Graph_File,  ""
+            "\tsubgraph cluster_%p {node_%p; label = \"Number: %zu \\n Addr: %p\"; color = \"white\";}\n\n", name_table + i, name_table + i, counter,name_table + i);
 
-            counter++;
-            //~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~ 
+        counter++;
+    //~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~ 
     if (!strcmp (name_table[i+1].name_id, "\0"))
     {
         fprintf(Graph_File, "\n"
@@ -176,17 +176,16 @@ static void Dump_name_table (NAME_TABLE* name_table)
     }
 
     fprintf (Graph_File,  "" 
-    "\tnode_%p  [label= \" Number:\\n %zu |  Value:\\n %s \"];\n", name_table + i + 1, counter , name_table[i+1].name_id);
+    "\tnode_%p  [label = \" Value:\\n \\\"%s\\\" \"];\n", name_table + i + 1, name_table[i+1].name_id);
 
     fprintf (Graph_File,  "" 
-            "\tsubgraph cluster_%p {name_table%p; label = \"Addr: %p\"; color = \"white\";}\n\n", name_table + i + 1, name_table + i + 1, name_table + i + 1);
+            "\tsubgraph cluster_%p {node_%p; label = \"Number: %zu \\nAddr: %p\"; color = \"white\";}\n\n", name_table + i + 1, name_table + i + 1, counter ,name_table + i + 1);
     
     fprintf (Graph_File, "\tnode_%p -> node_%p;\n\n", name_table + i, name_table + i + 1);
-
-    counter++;
-
     }
 
     fprintf (Graph_File, "}");
+
+    counter++;
 }
 
