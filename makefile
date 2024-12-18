@@ -3,8 +3,11 @@ B        = build_language/
 Target   = Language
 #-----------------------------------------------------------------------
 
-$(Target):      $(B)Main_Language.o $(B)Init_Language.o $(B)Dump_Language.o $(B)Lexical_analyzer.o $(B)Print.o $(B)Processing.o #$(B)TxLib.o
-	$(Compiler) $(B)Main_Language.o $(B)Init_Language.o $(B)Dump_Language.o $(B)Lexical_analyzer.o $(B)Print.o $(B)Processing.o -o Lang.exe
+$(Target):      $(B)Main_Language.o   $(B)Init_Language.o $(B)Dump_Language.o $(B)Lexical_analyzer.o   \
+				$(B)Parser_Language.o $(B)Print.o         $(B)Processing.o    $(B)TxLib.o
+
+	$(Compiler) $(B)Main_Language.o   $(B)Init_Language.o $(B)Dump_Language.o $(B)Lexical_analyzer.o   \
+				$(B)Parser_Language.o $(B)Print.o         $(B)Processing.o    $(B)TxLib.o -o Lang.exe
 #-----------------------------------------------------------------------
 
 $(B)Main_Language.o : Main_Language.cpp                           \
@@ -19,14 +22,20 @@ $(B)Init_Language.o : Init_Language.cpp                           \
 				Init_Language.h
 	$(Compiler) -c Init_Language.cpp -o $(B)Init_Language.o
 
+$(B)Parser_Language.o : Parser_Language.cpp                       \
+						Parser_Language.h                         \
+						Common_Language.h                         
+	$(Compiler) -c Parser_Language.cpp - o $(B)Parser_Language.o
+
 $(B)Dump_Language.o : Dump_Language.cpp                           \
 				Common_Language.h                                 \
 				Init_Language.h
 	$(Compiler) -c Dump_Language.cpp -o $(B)Dump_Language.o
 
-$(B)Lexical_analyzer.o :Lexical_analyzer.cpp                      \
-				Common_Language.h                                \
-				Lexical_analyzer.h
+$(B)Lexical_analyzer.o : Lexical_analyzer.cpp                     \
+				Common_Language.h                                 \
+				Lexical_analyzer.h                                \
+				SyntaxError.h
 	$(Compiler) -c Lexical_analyzer.cpp -o $(B)Lexical_analyzer.o
 
 $(B)Print.o : ../Processor/Onegin_for_proc/Print.cpp              \

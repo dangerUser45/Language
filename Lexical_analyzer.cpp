@@ -6,6 +6,8 @@
 #include "Init_Language.h"
 #include "Dump_Language.h"
 #include "SyntaxError.h"
+#include "Locale_Russian_Language.h"
+
 static void Get_Token_Num (node* Token_array,  const char* string, size_t* token_ptr, size_t* pointer);
 static void Get_Token_Operator_ID (NAME_TABLE* name_table, node* Token_array,  const char* string, size_t* token_ptr, size_t* pointer_addr, size_t* name_table_ptr_addr);
 static int Compare_KeyWords (const char* string, size_t num_symbols);
@@ -13,7 +15,6 @@ static int Compare_KeyWords (const char* string, size_t num_symbols);
 //==================================================================================================
 int Lexical_analyzer (Language* Lang_data)
 {
-    setlocale (LC_ALL, "Russian");
 
     const char* string = Lang_data -> onegin -> buffer_addr;
 
@@ -83,7 +84,7 @@ static void Get_Token_Operator_ID (NAME_TABLE* name_table, node* Token_array,  c
 static int Compare_KeyWords (const char* string, size_t num_symbols)
 {
     static Key_words KeyWords [] = {
-        {"\"История охоты одного кроманьонца на МАМОНТА!\"", BEGINING},
+        {"\"История_охоты_одного_кроманьонца_на_МАМОНТА!\"", BEGINING},
         {"УУУААА_Я_ХАТЕТЬ_ВЫЙТИ_ИЗ_ПИЩЕРА", OPENING_CURLY_BRACKET},
         {"РАААААААРРРР_еда_класть_в_рот" , CLOSING_CURLY_BRACKET},
         {"залезать_на_дерево", OPENING_BRACKET},
@@ -95,7 +96,9 @@ static int Compare_KeyWords (const char* string, size_t num_symbols)
         {"следить_за_добыча_ням_ням", WHILE},
         {"sin", SIN},
         {"cos", COS},
-        {"Охота закончена !", ENDING}
+        {"Охота закончена !", ENDING},
+        {"взять", PRE_EQUAL},
+        {"и_палажить_в", IN_EQUAL}
     };
 
     size_t number_op = sizeof (KeyWords) / sizeof (Key_words);

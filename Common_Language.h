@@ -26,6 +26,8 @@ enum operations {
     CALL_FUNCTION         = 20,
     BEGINING              = 21,
     ENDING                = 22,
+    PRE_EQUAL             = 24,
+    IN_EQUAL              = 25,
 
 };
   

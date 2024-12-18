@@ -1,44 +1,47 @@
 #include "Common_Language.h"
-#include "Parser.h"
+#include "Parser_Language.h"
+#include "Locale_Russian_Language.h"
 
+static node* GetAssignment (node* Token_array);
 static node* GetExpression ();
-static node* GetTerm ();
-static node* GetPow  ();
-static node* GetPrime ();
-static node* GetMathFunc ();
-static node* GetVar ();
-static node* GetBracketEx ();
-static node* GetNumber ();
-static void SyntaxError ();
+static node* GetTerm       ();
+static node* GetPow        ();
+static node* GetPrime      ();
+static node* GetMathFunc   ();
+static node* GetVar        ();
+static node* GetBracketEx  ();
+static node* GetNumber     ();
+static void SyntaxError    ();
 
-const char* string  = 0;
-int         pointer = 0;
+int pointer = 0; 
 
 //==================================================================================================
 node* GetGrammatic (Language* Lang_data)
 {
     node* Token_array = Lang_data -> Token_array;
+    //size_t pointer = 0;
 
-    if (Token_array[pointer].value != BEGINING) SyntaxError ();
+    if (Token_array[pointer].value.id != BEGINING) SyntaxError ();
 
     node* node_val = GetAssignment (Token_array);
 
-    if (Token_array[pointer].value != ENDING)   SyntaxError ();
+    if (Token_array[pointer].value.id != ENDING)   SyntaxError ();
     else  
         pointer++;
     
     return node_val;
 }
 //==================================================================================================
-node* GetAssignment (node* Token_array)
+node* GetAssignment (node* Token_array, size_t* pointer)
 {
     node* Node = 0;
-    if (Token_array[pointer].value.val_op != "взять")
-        SyntaxError ();
+    if (Token_array[*pointer].value.val_op == PRE_EQUAL)
+        Node = 
+    else SyntaxError ();
 
     else 
     {
-        pointer++;
+        (*pointer)++;
         node* Node = GetID (Token_array);
         if (Node) 
 
