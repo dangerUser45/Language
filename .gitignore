@@ -4,4 +4,4 @@
 *.dmp
 *.html
 *.txt
-/build_language
+build_language/
