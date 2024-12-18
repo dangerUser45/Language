@@ -1,6 +1,5 @@
 #include "Common_Language.h"
 #include "Parser_Language.h"
-#include "Locale_Russian_Language.h"
 
 static node* GetAssignment (node* Token_array);
 static node* GetExpression ();
@@ -183,18 +182,11 @@ node* GetMathFunc ()
     else return 0;
 }
 //==================================================================================================
-node* GetNumber()
+node* GetNumber(node* Token_array)
 {
-    int val = 0;
-    int old_pointer = pointer;
-    while ('0' <= string[pointer] && string[pointer] <= '9')
-    {
-        val = val * 10 + string[pointer] - '0';
-        pointer++; 
-    }
-    if (old_pointer == pointer) SyntaxError ();
+    pointer++ 
 
-    return Create_node (NUM, val, 0, 0);
+    return Create_node (Token_array[pointer-1].value., val, 0, 0);
 }
 //==================================================================================================
 void SyntaxError ()

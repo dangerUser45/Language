@@ -1,5 +1,5 @@
 #pragma once
 
-enum ERROR {EXCEEDED_NUM_SYM_ID = (1<<0),
+enum __MY_ERROR__ {EXCEEDED_NUM_SYM_ID = 1,
 
 };
