@@ -2,7 +2,7 @@
 
 #include "Common_Language.h"
 
-const int MAX_LENGTH_OP = 32;
+const int MAX_LENGTH_OP = 256;
 
 struct Key_words
 {

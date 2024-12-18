@@ -1,4 +1,4 @@
 #pragma once
-#include "LanguageCommon.h"
+#include "Common_Language.h"
 
 node* GetGrammatic (const char* string);

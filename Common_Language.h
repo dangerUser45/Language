@@ -4,26 +4,36 @@
 
 enum type_t     {NUM = 1, ID, OP};
 enum operations { 
-    ADD    = 1,
-    SUB    = 2,
-    MUL    = 3, 
-    DIV    = 4, 
-    COS    = 5, 
-    SIN    = 6, 
-    POW    = 7, 
-    LOG    = 8, 
-    LN     = 9, 
-    EXP    = 10, 
-    TAN    = 11, 
-    IF     = 12,
-    EQUALS = 13  
+    ADD                   = 1,
+    SUB                   = 2,
+    MUL                   = 3, 
+    DIV                   = 4, 
+    COS                   = 5, 
+    SIN                   = 6, 
+    POW                   = 7, 
+    LOG                   = 8, 
+    LN                    = 9, 
+    EXP                   = 10, 
+    TAN                   = 11, 
+    IF                    = 12,
+    WHILE                 = 13,
+    EQUALS                = 14,
+    OPENING_CURLY_BRACKET = 15,
+    CLOSING_CURLY_BRACKET = 16,
+    OPENING_BRACKET       = 17,
+    CLOSING_BRACKET       = 18,
+    CALL_VAR              = 19,
+    CALL_FUNCTION         = 20,
+    BEGINING              = 21,
+    ENDING                = 22,
+
 };
   
 #define TYPE "lg"
 #define SCALE 50
 #define LENGTH 256 
 
-const int MAX_NAME_ID = 64;
+const int MAX_NAME_ID = 256;
 
 typedef double val_t;
 

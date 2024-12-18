@@ -1,6 +1,4 @@
-#include "Parser.h"
-
-#include "Diff.h"
+#include "Common_Language.h"
 #include "Parser.h"
 
 static node* GetExpression ();
@@ -17,17 +15,35 @@ const char* string  = 0;
 int         pointer = 0;
 
 //==================================================================================================
-node* GetGrammatic (const char* buffer)
+node* GetGrammatic (Language* Lang_data)
 {
-    string = buffer;
-    node* node_val = GetExpression ();
+    node* Token_array = Lang_data -> Token_array;
 
-    if (string[pointer] != '$')
-        SyntaxError ();
-    else 
+    if (Token_array[pointer].value != BEGINING) SyntaxError ();
+
+    node* node_val = GetAssignment (Token_array);
+
+    if (Token_array[pointer].value != ENDING)   SyntaxError ();
+    else  
         pointer++;
     
     return node_val;
+}
+//==================================================================================================
+node* GetAssignment (node* Token_array)
+{
+    node* Node = 0;
+    if (Token_array[pointer].value.val_op != "взять")
+        SyntaxError ();
+
+    else 
+    {
+        pointer++;
+        node* Node = GetID (Token_array);
+        if (Node) 
+
+        else if (Node = GetNumber)
+    }
 }
 //==================================================================================================
 node* GetExpression ()

@@ -15,7 +15,7 @@ FILE* Graph_File_Utf8;
 Language* Language_init (int argc ,char* argv[])
 {
 
-    Log_File = Create_file ("LOG_LANGUAGE.html");        //!!!    
+    Log_File = Create_file ("LOG_LANGUAGE.html");          
     fprintf (Log_File, "<pre>");
 
     Language* lang_data = (Language*) calloc (1, sizeof (Language));

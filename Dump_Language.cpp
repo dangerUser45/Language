@@ -37,7 +37,7 @@ int Dump_graphviz_language (void* ptr, GRAPH_PRINT object_print)
         case _NAME_TABLE:
         {
             NAME_TABLE* name_table = (NAME_TABLE*) ptr;
-            fprintf (Log_File, "<b><fontsize = #FF0000>\t\t\t\t\t\t\tNAME TABLE</fontsize></b>");
+            fprintf (Log_File, "<b><fontsize =rgb(255, 0, 0)>\t\t\t\t\t\t\tNAME TABLE</fontsize></b>");
             Dump_name_table (name_table);
             break;
         }
