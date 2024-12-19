@@ -3,8 +3,8 @@ B        = build_language/
 Target   = Language
 #-----------------------------------------------------------------------
 
-$(Target):      $(B)Main_Language.o $(B)Init_Language.o $(B)Dump_Language.o $(B)Lexical_analyzer.o $(B)Print.o  $(B)Processing.o $(B)TxLib.o
-	$(Compiler) $(B)Main_Language.o $(B)Init_Language.o $(B)Dump_Language.o $(B)Lexical_analyzer.o $(B)Print.o  $(B)Processing.o $(B)TxLib.o -o Lang.exe
+$(Target):      $(B)Main_Language.o $(B)Init_Language.o $(B)Dump_Language.o $(B)Parser_Language.o $(B)Lexical_analyzer.o $(B)Print.o  $(B)Processing.o $(B)TxLib.o
+	$(Compiler) $(B)Main_Language.o $(B)Init_Language.o $(B)Dump_Language.o $(B)Parser_Language.o $(B)Lexical_analyzer.o $(B)Print.o  $(B)Processing.o $(B)TxLib.o -o Lang.exe
 #-----------------------------------------------------------------------
 
 $(B)Main_Language.o : Main_Language.cpp                           \
@@ -21,8 +21,9 @@ $(B)Init_Language.o : Init_Language.cpp                           \
 
 $(B)Parser_Language.o : Parser_Language.cpp                       \
 						Parser_Language.h                         \
-						Common_Language.h                         
-	$(Compiler) -c Parser_Language.cpp - o $(B)Parser_Language.o
+						Common_Language.h                         \
+						..\SuperLibs\COLOR.h      
+	$(Compiler) -c Parser_Language.cpp -o $(B)Parser_Language.o
 
 $(B)Dump_Language.o : Dump_Language.cpp                           \
 				Common_Language.h                                 \

@@ -4,10 +4,11 @@
 
 const int MAX_LENGTH_OP = 256;
 
-struct Key_words
+struct Key_word
 {
     const char name_op [MAX_LENGTH_OP];
     operations OP;
+    size_t length_key_word;
 
 };
 

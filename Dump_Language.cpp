@@ -1,5 +1,5 @@
-/*#define TX_COMPILED
-#include "..\SuperLibs\TXLib.h"*/
+#define TX_COMPILED
+#include "..\SuperLibs\TXLib.h"
 
 #include "Common_Language.h"
 #include "Init_language.h"
@@ -11,11 +11,18 @@ extern FILE* Graph_File_Utf8;
 
 static void Dump_name_table  (NAME_TABLE* name_table);
 static void Dump_table_token (node* node_);
+static void Dump_graph_init (node* node_);
+static void Dump_graph_recursive (node* Node, size_t rank);
+static void Draw_tree (node* Node);
+static bool Check_Name_Table (void* ptr);
 
 //==================================================================================================
 int Dump_graphviz_language (void* ptr, GRAPH_PRINT object_print)
 {
     if (!ptr) return 1;
+
+    if (Check_Name_Table (ptr));
+    else return 0;
 
     static size_t number_pic = 1;
 
@@ -38,6 +45,10 @@ int Dump_graphviz_language (void* ptr, GRAPH_PRINT object_print)
         {
             NAME_TABLE* name_table = (NAME_TABLE*) ptr;
             fprintf (Log_File, "<b><fontsize =rgb(255, 0, 0)>\t\t\t\t\t\t\tNAME TABLE</fontsize></b>");
+
+            if (1) {
+                fprintf (Log_File, "NAME TABLE hasn't elements\n"); return 0; }
+
             Dump_name_table (name_table);
             break;
         }
@@ -48,7 +59,15 @@ int Dump_graphviz_language (void* ptr, GRAPH_PRINT object_print)
             Dump_table_token (Node);
             break;
         }
-        default: fprintf (stderr, "ERROR IN: %s: %d", __FILE__, __LINE__);
+        case TREE:
+        {
+                    DBG(printf ("I in Dump() case: TREE ptr = %p\n", (node*)ptr);)
+            node* tree = (node*) ptr;
+            Dump_graph_init (tree);
+            break;
+        }
+
+        default: fprintf (stderr, "ERROR IN: %s: %d\n", __FILE__, __LINE__);
     }
 
     Close_File (Graph_File);
@@ -188,4 +207,113 @@ static void Dump_name_table (NAME_TABLE* name_table)
 
     counter++;
 }
+//==================================================================================================
+void Dump_graph_init (node* node_)
+{
+    fprintf (Graph_File, "digraph\n" 
+    "{\n"
+    "\trankdir = TB;\n\n");
+    
+    Dump_graph_recursive (node_, 1);
 
+    fprintf (Graph_File, "}");
+
+}
+//==================================================================================================
+void Dump_graph_recursive (node* Node, size_t rank)
+{
+    if (!Node) return;
+    Draw_tree (Node);
+
+    fprintf (Graph_File, ""
+        "\t{\n"                                                        
+            "\t\tnode[ color = \"#581845\", shape = \"circle\", style = \"filled\" ,fillcolor=\"#fe5656\"];\n"
+            "\t\tedge[ color = \"white\"]\n"
+            "\t\t\"%zu\" ->  \"%zu\";\n", rank, rank + 1);
+    
+    fprintf (Graph_File,  "\t}\n\n"
+        "\t{ rank = %zu; \"%zu\"; \"node_%p\" }\n", rank, rank, Node);
+
+    if (Node -> left != NULL)
+    {
+        Draw_tree (Node -> left);
+        fprintf (Graph_File, ""   //!!!
+        "\tnode_%p  -> node_%p [color = \"#ff0000\", fontsize = 16];\n", Node, Node -> left);
+    }
+
+    else {
+        fprintf(Graph_File, "\n"
+        "\t{\n"
+            "\t\tnode [ color = \"#007cff\", shape = \"rectangle\", style = \"filled\", fillcolor = \"#a2f0f8\"];\n"
+            "\t\tedge [ color = \"#007cff\", fontsize = 16];\n\n"
+
+            "\t\tnode_l_null_%p [shape = \"ellipse\", label = \" null\" ];\n", Node);
+        
+        fprintf(Graph_File, ""
+            "\t\tnode_%p  -> node_l_null_%p;\n", Node, Node);
+        fprintf(Graph_File, ""
+            "\t}\n");
+        }  
+
+    if (Node -> right != NULL)
+    {
+        Draw_tree (Node -> right);
+        fprintf(Graph_File, "\n" //!!!
+        "\tnode_%p  -> node_%p[color = \"#ff0000\", fontsize = 16];\n", Node, Node -> right);
+    }
+
+    else {
+        fprintf(Graph_File, "\n"
+        "\t{\n"
+            "\t\tnode [ color = \"#007cff\", shape = \"rectangle\", style = \"filled\", fillcolor = \"#a2f0f8\"];\n"
+            "\t\tedge [ color = \"#007cff\", fontsize = 16];\n\n"
+
+            "\t\tnode_r_null_%p [shape = \"ellipse\", label = \" null\" ];\n", Node);
+        
+        fprintf(Graph_File, ""
+            "\t\tnode_%p  -> node_r_null_%p;\n", Node, Node);
+        fprintf(Graph_File, "" 
+            "\t}\n");
+          }
+
+    fprintf (Graph_File, ""
+    "\t{\n"                                                        
+        "\t\tnode[ shape = \"plaintext\", style = \"filled\" ,fillcolor=\"white\"];\n"
+        "\t\tedge[ color = \"white\"]\n"
+        "\t\t\"%zu\" ->  \"%zu\";\n", rank, rank + 1);
+
+    fprintf (Graph_File, ""
+    "\t}\n");
+
+        ++rank;
+
+        Dump_graph_recursive (Node -> left, rank);
+        Dump_graph_recursive (Node -> right, rank);
+
+}
+//==================================================================================================
+void Draw_tree (node* Node)
+{
+     if (Node -> type == NUM){
+            fprintf(Graph_File, ""
+        "\tnode_%p [ color = \"#CCFFE6\", style = \"filled\", fillcolor = \"#a2f8a4\", shape = \"Mrecord\", label = \"{ addr: %p | val = %" TYPE "| type = %s | { L:\\n addr: %p | R: \\n addr: %p } }\" ];\n", Node, Node, Node -> value.val_num, "NUM", Node -> left, Node -> right);
+        }
+
+    else if (Node -> type == ID){
+            fprintf(Graph_File, ""
+        "\tnode_%p [ color = \"#CCCCFF\", style = \"filled\", fillcolor = \"#ff5fe0\", shape = \"Mrecord\", label = \"{ addr: %p | val = \'%zu\' | type = %s | { L:\\n addr: %p | R: \\n addr: %p } }\" ];\n",  Node, Node, Node -> value.id, "ID",      Node -> left, Node -> right);
+        }
+
+    else if (Node -> type == OP){
+        fprintf(Graph_File, ""
+        "\tnode_%p [ color = \"#FFC\",    style = \"filled\", fillcolor = \"#ecfd74\", shape = \"Mrecord\", label = \"{ addr: %p | val = \'%d\'  |  type = %s | { L:\\n addr: %p | R: \\n addr: %p } }\" ];\n", Node, Node, Node -> value.val_op, "OP",  Node -> left, Node -> right);
+        }
+}
+//=================================================================================================
+bool Check_Name_Table (void* ptr)
+{
+    NAME_TABLE* ptr_casted = (NAME_TABLE*) ptr;
+    if (ptr_casted[0].name_id[0] == '\0') return false;
+    else return true;
+}
+//==================================================================================================

@@ -56,7 +56,9 @@ static void Get_Token_Operator_ID (NAME_TABLE* name_table, node* Token_array,  c
 {
     size_t old_pointer = *pointer_addr;
     while (is_rus_alnum (string__[*pointer_addr]) || isalnum(string__[*pointer_addr]) || ispunct(string__[*pointer_addr]))
+    {
         (*pointer_addr)++;
+    }
         DBG (printf ("string + pointer_addr = %-20s\n", string__ + *pointer_addr);)
     size_t length_word = *pointer_addr - old_pointer;
         DBG (printf ("old pointer = %zu ", old_pointer);)
@@ -94,28 +96,28 @@ static void Get_Token_Operator_ID (NAME_TABLE* name_table, node* Token_array,  c
 static int Compare_KeyWords (const char* string__, size_t num_symbols)
 {
     setlocale(LC_ALL, "Russian");
-    static Key_words KeyWords [] = {
-        {"»стори€_охоты_одного_кроманьонца_на_ћјћќЌ“ј!", BEGINING},
-        {"”””јјј_я_’ј“≈“№_¬џ…“»_»«_ѕ»ў≈–ј", OPENING_CURLY_BRACKET},
-        {"–јјјјјјј––––_еда_класть_в_рот" , CLOSING_CURLY_BRACKET},
-        {"залезать_на_дерево", OPENING_BRACKET},
-        {"слезать_с_дерево", CLOSING_BRACKET},
-        {"хатеть_чтобы_<переменна€>_быть_<число>", CALL_VAR},
-        {"=", EQUALS},
-        {"залезть_на_ћјћќЌ“ј", CALL_FUNCTION},
-        {"’ј“≈“№  ј ј“№ Ќќ", IF},
-        {"следить_за_добыча_н€м_н€м", WHILE},
-        {"sin", SIN},
-        {"cos", COS},
-        {"ќхота закончена !", ENDING},
-        {"вз€ть", PRE_EQUAL},
-        {"и_палажить_в", IN_EQUAL}
+    static Key_word KeyWords [] = {
+        {"»стори€_охоты_одного_кроманьонца_на_ћјћќЌ“ј!", BEGINING, 44},
+        {"”””јјј_я_’ј“≈“№_¬џ…“»_»«_ѕ»ў≈–ј", OPENING_CURLY_BRACKET, 31},
+        {"–јјјјјјј––––_еда_класть_в_рот" , CLOSING_CURLY_BRACKET, 29},
+        {"залезать_на_дерево", OPENING_BRACKET, 18},
+        {"слезать_с_дерево", CLOSING_BRACKET, 16},
+        {"хатеть_чтобы_<переменна€>_быть_<число>", CALL_VAR, 38},
+        {"=", EQUALS, 1},
+        {"залезть_на_ћјћќЌ“ј", CALL_FUNCTION, 18},
+        {"’ј“≈“№  ј ј“№ Ќќ", IF, 16},
+        {"следить_за_добыча_н€м_н€м", WHILE, 25},
+        {"sin", SIN, 3},
+        {"cos", COS, 3},
+        {"ќхота_закончена_!", ENDING, 17},
+        {"вз€ть", PRE_EQUAL, 5},
+        {"и_палажить_в", IN_EQUAL, 12}
     };
 
-    size_t number_op = sizeof (KeyWords) / sizeof (Key_words);
+    size_t number_op = sizeof (KeyWords) / sizeof (Key_word);
 
     for (size_t i = 0; i < number_op; i++)
-        if  (!strncmp (string__, KeyWords[i].name_op, num_symbols))
+        if  (!strncmp (string__, KeyWords[i].name_op, num_symbols) && num_symbols == KeyWords[i].length_key_word)   //!!!
             return KeyWords[i].OP;
 
     return NOT_OP;

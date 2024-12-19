@@ -9,7 +9,9 @@
 #include "Dump_Language.h"
 #include "Parser_Language.h"
 
-#define DUMP(text)  Dump_graphviz_language ((void*) (language_data ->Token_array), text)
+#define DUMP_TOKEN      Dump_graphviz_language ((void*) (language_data ->Token_array), TOKEN_TABLE)
+#define DUMP_NAME_TABLE Dump_graphviz_language ((void*) (language_data -> name_table), _NAME_TABLE);
+#define DUMP_TREE(text) Dump_graphviz_language ((void*) (text), TREE)
 
 int main (int argc, char* argv[])
 {
@@ -17,15 +19,19 @@ int main (int argc, char* argv[])
     Language* language_data = Language_init (argc, argv);
 
     Lexical_analyzer (language_data);
-    DUMP (TOKEN_TABLE);
-    Dump_graphviz_language ((void*) (language_data -> name_table), _NAME_TABLE);
+    DUMP_TOKEN;
+    DUMP_NAME_TABLE;
 
     //Lexeme_gluing (language_data);                                                                  //TODO make many word lexemes
-    //  Get_Grammatic (language_data);
+    $$ node* tree = GetGrammatic (language_data);
+    $(tree);
+    $$ DUMP_TREE  (tree);
 
     printf ("All Good!");
     txDisableAutoPause ();
 
 }
 
-#undef DUMP
+#undef DUMP_TOKEN
+#undef DUMP_NAME_TABLE
+#undef DUMP_TREE

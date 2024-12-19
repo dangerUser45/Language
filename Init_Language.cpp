@@ -1,3 +1,6 @@
+#define TX_COMPILED
+#include "..\SuperLibs\TXLib.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,14 +10,12 @@
 #include "Common_Language.h"
 #include "Init_Language.h"
 
-
 FILE* Log_File;
 FILE* Graph_File;
 FILE* Graph_File_Utf8;
 
 Language* Language_init (int argc ,char* argv[])
 {
-
     Log_File = Create_file ("LOG_LANGUAGE.html");          
     fprintf (Log_File, "<pre>");
 
