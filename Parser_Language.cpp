@@ -1,55 +1,42 @@
 #define TX_COMPILED
 #include "..\SuperLibs\TXLib.h"
+
 #include "..\SuperLibs\COLOR.h"
 
 #include "Common_Language.h"
 #include "Parser_Language.h"
 #include "Init_Language.h"
+#include "SyntaxError.h"
 
-/*static node* GetAssignment (node* Token_array);
-static node* GetExpression (node* Token_array);
-static node* GetTerm       (node* Token_array);
-static node* GetPow        (node* Token_array);                        
-static node* GetPrime      (node* Token_array);
-static node* GetMathFunc   (node* Token_array);
-static node* GetVar        (node* Token_array);
-static node* GetBracketEx  (node* Token_array);*/
-static node* GetNumber     (node* Token_array);
+static node* GetExpression          (Context_parser* context);
+//static node* GetAssignment        (Context_parser* context);
+static node* GetTerm                (Context_parser* context);
+static node* GetPow                 (Context_parser* context);                        
+static node* GetPrimaryExpression   (Context_parser* context);
+//static node* GetMathFunc          (Context_parser* context);
+static node* GetBracketEx           (Context_parser* context);
+static node* GetNumber              (Context_parser* context);
 node* Create_node (type_t type, double data, node* node_left, node* node_right);
-//static void  SyntaxError   (node* Token_array);
-void SyntaxError ();
 
 extern FILE* Log_File;
-size_t pointer = 0;
 
 //==================================================================================================
 node* GetGrammatic (Language* Lang_data)
 {
     node* Token_array = Lang_data -> Token_array;
-    node* Node = 0;
-    // /size_t pointer = 0;
-
-    if (Token_array[pointer].value.id != BEGINING) SyntaxError ();
+    Context_parser context = {};
+    
+    $$ if (Token_array[context.pointer].value.id != BEGINING) SYNTAX_ERROR
         //DBG(printf ("\n%sGetGrammatic()%s: BEGINING = %zu, " GREEN "pointer = %zu" RESET "\n", RED, RESET, Token_array[pointer].value.id, pointer);)
-    pointer++;
-        //DBG(printf("I high pointer," GREEN " pointer = %zu\n" RESET "", pointer);)
-    //node* node_val = GetAssignment (Token_array);
-    // node* Node = GetExpression (Token_array);
-    if (Token_array[pointer].type == NUM) {
-        //DBG(printf("Token_array[pointer].value = %lg\n", Token_array[pointer].value.val_num);)
-        //DBG(printf("Token_array + pointer = %p\n", Token_array + pointer);)
-    Node = GetNumber(Token_array); printf ("Im here\n");   }
-    $(Node);
-        //DBG(printf ("I get num node, his addr = %p\n", Node);)
-        //DBG(printf ("GetGrammatic(): Num = %lg\n", Token_array[pointer].value.val_num);)
-        //DBG(printf ("pointer after num = %zu\n", pointer);)
-    pointer++;  
-
-    if (Token_array[pointer].value.id != ENDING)   SyntaxError ();
-    else
-        pointer++;
+    context.pointer++;
         
-    return Node;
+    $$ node* Node = GetExpression(&context);   
+
+    if (Token_array[context.pointer].value.id != ENDING)   SYNTAX_ERROR
+    else
+        context.pointer++;
+
+    $$ return Node;
 }
 /*//==================================================================================================
 node* GetAssignment (node* Token_array, size_t* pointer)
@@ -57,7 +44,7 @@ node* GetAssignment (node* Token_array, size_t* pointer)
     node* Node = 0;
     if (Token_array[*pointer].value.val_op == PRE_EQUAL)
         Node = 
-    else SyntaxError ();
+    else SYNTAX_ERROR;
 
     else 
     {
@@ -68,99 +55,102 @@ node* GetAssignment (node* Token_array, size_t* pointer)
         else if (Node = GetNumber)
     }
 }
-//==================================================================================================
-node* GetExpression (node* Token_array)
+//==================================================================================================*/
+node* GetExpression (Context_parser* context)
 {
-    node* node_val1 = GetTerm ();
+    node* Token_array = context -> Token_array;
 
-    while (string[pointer] == '+' || string[pointer] == '-')
+    $$ node* node_val1 = GetTerm (context);
+
+    while (Token_array[context -> pointer].value.val_op  == ADD || Token_array[context -> pointer].value.val_op == SUB)
     {
-        char op = string[pointer];
-        pointer++;
-        node* node_val2 = GetTerm ();
-
-    if (op == '+')
-         node_val1 = _ADD (node_val1, node_val2);
-    else node_val1 = _SUB (node_val1, node_val2);
-    }
-
-    return node_val1;
-}
-//==================================================================================================
-node* GetTerm (node* Token_array)
-{
-    node* node_val1 = GetPow ();
-
-    while (string[pointer] == '*' || string[pointer] == '/')
-    {
-        char op = string[pointer];
-    pointer++;
-    node* node_val2 = GetPow ();
-
-    if (op == '*')
-         node_val1 = _MUL (node_val1, node_val2);
-    else node_val1 = _DIV (node_val1, node_val2);
-    }
-
-    return node_val1;
-}
-//==================================================================================================
-node* GetPow  (node* Token_array)
-{
-    node* node_val1 = GetPrime ();
-
-    while (string[pointer] == '^')
-    {
-        char op = string[pointer];
-    pointer++;
-    node* node_val2 = GetPrime ();
-
-    if (op == '^')
-        node_val1 = _POW (node_val1, node_val2);
-    }
-
-    return node_val1;
-}
-//==================================================================================================
-
-node* GetPrime (node* Token_array)
-{
-    node* node_val = GetBracketEx ();
-    if (node_val)
-        return node_val;
-
-    else if (string[pointer] == 'x')
-        return GetVar ();
-
-    else node_val = GetMathFunc ();
-        if (node_val)
-            return node_val;      
-        else 
-            return GetNumber ();
-}
-//==================================================================================================
-node* GetBracketEx (node* Token_array)
-{
-   if (string[pointer] == '(')
-    {
-        pointer++;
-        node* node_val = GetExpression ();
-        if (string[pointer] != ')')
-            SyntaxError ();
-        pointer++;
-        return node_val;
-    }
-    else return 0;
-}
-//==================================================================================================
-node* GetVar (node* Token_array)
-{
-    pointer++;
-    node* node_var = _X;
+        context -> pointer++;
+        node* node_val2 = GetTerm (context);
     
-    return node_var;
+        Token_array[context -> pointer].left  = node_val1;
+        Token_array[context -> pointer].right = node_val2;
+        node_val1 = Token_array + context -> pointer;
+    }
+
+    $$ return node_val1;
 }
 //==================================================================================================
+node* GetTerm (Context_parser* context)
+{
+    node* Token_array = context -> Token_array;
+    $$ node* node_val1 = GetPow (context);
+
+    while (Token_array[context -> pointer].value.val_op == MULTIPLICATION || Token_array[context -> pointer].value.val_op == DIVISION)
+    {
+        context -> pointer++;
+        node* node_val2 = GetPow (context);
+
+        Token_array[context -> pointer].left  = node_val1;
+        Token_array[context -> pointer].right = node_val2;
+        node_val1 = Token_array + context -> pointer;
+    }
+
+    $$ return node_val1;
+}
+//==================================================================================================
+node* GetPow  (Context_parser* context)
+{
+    node* Token_array = context ->Token_array;
+
+    $$ node* node_val1 = GetPrimaryExpression (context);
+
+    while (Token_array[context -> pointer].value.val_op == ELEVATION)
+    {
+        int op = Token_array[context -> pointer].value.val_op;
+        context -> pointer++;
+        node* node_val2 = GetPrimaryExpression (context);
+
+        if (op == ELEVATION)
+        {
+            Token_array[context -> pointer].left  = node_val1;
+            Token_array[context -> pointer].right = node_val2;
+            node_val1 = Token_array + context -> pointer;
+        }
+    }
+
+    $$ return node_val1;
+}
+//==================================================================================================
+
+node* GetPrimaryExpression (Context_parser* context)
+{
+    $$ node* node_val = GetBracketEx (context);
+    if (node_val) {
+        $$ return node_val;}
+
+    /*else node_val = GetMathFunc (Context_parser* context);
+        if (node_val)
+            return node_val;*/      
+    else {
+        $$ return GetNumber(context);}
+}
+//==================================================================================================
+node* GetBracketEx (Context_parser* context)
+{
+    $$ node* Token_array = context -> Token_array;
+        DBG (printf("Im in GetBrackEx (): context = %p\n context -> Token_array = %p, context -> Token_array [pointer] = %p", context, context -> Token_array, context -> Token_array [context -> pointer]);)
+    $$  DBG (printf ("Token_array[context -> pointer].value.val_op = %lg", Token_array[context -> pointer].value.val_op);)
+
+
+   $$ if (Token_array[context -> pointer].value.val_op == OPENING_BRACKET)
+    {
+        $$ context -> pointer++;
+        $$ node* node_val = GetExpression (context);
+
+        $$ if (Token_array[context -> pointer].value.val_op != CLOSING_BRACKET)
+            SYNTAX_ERROR;
+
+        context -> pointer++;
+        return node_val;
+    }
+    else {$$ return 0;}
+}
+/*//==================================================================================================
 node* GetMathFunc (node* Token_array)
 {
 //-------------- COS ---------------------------
@@ -183,10 +173,10 @@ node* GetMathFunc (node* Token_array)
     else if (string[pointer] == 'L') {
     pointer++;
     node* node1 = GetBracketEx ();
-        if (!node1) SyntaxError ();
+        if (!node1) SYNTAX_ERROR;
 
     node* node2 = GetBracketEx ();
-        if (!node2) SyntaxError ();
+        if (!node2) SYNTAX_ERROR;
 
     return _LOG(node1, node2);       }
 //-------------- EXP ---------------------------
@@ -203,19 +193,12 @@ node* GetMathFunc (node* Token_array)
     else return 0;
 }
 //==================================================================================================*/
-node* GetNumber(node* Token_array)
+node* GetNumber (Context_parser* context)
 {
-    DBG(printf ("I in GetNumber(): param = %p\n", Token_array + pointer);)
-    DBG(printf ("I in GetNumber(): %p\n", Token_array + pointer);)
-    return Token_array + pointer;
+    $$ context -> pointer++;
+    $$ return (context -> Token_array) + (context -> pointer - 1);
 }
-//==================================================================================================
-void SyntaxError ()
-{
-    printf ("Syntax Error\n");
-    exit (1);
-}
-//==================================================================================================
+/*//==================================================================================================
 node* Create_node (type_t type, double data, node* node_left, node* node_right)
 {
     node* new_node = (node *) calloc (1, sizeof (node));
@@ -228,4 +211,4 @@ node* Create_node (type_t type, double data, node* node_left, node* node_right)
 
     return new_node;
 }
-//==================================================================================================
+//==================================================================================================*/

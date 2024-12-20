@@ -22,7 +22,8 @@ $(B)Init_Language.o : Init_Language.cpp                           \
 $(B)Parser_Language.o : Parser_Language.cpp                       \
 						Parser_Language.h                         \
 						Common_Language.h                         \
-						..\SuperLibs\COLOR.h      
+						SyntaxError.h							  \
+						..\SuperLibs\COLOR.h     
 	$(Compiler) -c Parser_Language.cpp -o $(B)Parser_Language.o
 
 $(B)Dump_Language.o : Dump_Language.cpp                           \

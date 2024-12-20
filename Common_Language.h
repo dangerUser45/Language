@@ -28,6 +28,11 @@ enum operations {
     ENDING                = 22,
     PRE_EQUAL             = 24,
     IN_EQUAL              = 25,
+    ADDITTION             = 26,
+    SUBTRACTION           = 27,
+    DIVISION              = 28,
+    MULTIPLICATION        = 29,
+    ELEVATION             = 30,
 
 };
   

@@ -111,7 +111,12 @@ static int Compare_KeyWords (const char* string__, size_t num_symbols)
         {"cos", COS, 3},
         {"Охота_закончена_!", ENDING, 17},
         {"взять", PRE_EQUAL, 5},
-        {"и_палажить_в", IN_EQUAL, 12}
+        {"и_палажить_в", IN_EQUAL, 12},
+        {"дабавить", ADDITTION, 8},
+        {"попробовать", SUBTRACTION, 11},
+        {"понюхать", DIVISION, 15},
+        {"потрогать", MULTIPLICATION, 9},
+        {"СЛОЖНААА", ELEVATION, 8}
     };
 
     size_t number_op = sizeof (KeyWords) / sizeof (Key_word);
