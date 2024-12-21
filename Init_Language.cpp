@@ -1,6 +1,3 @@
-#define TX_COMPILED
-#include "..\SuperLibs\TXLib.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

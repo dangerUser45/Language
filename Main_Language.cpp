@@ -1,7 +1,3 @@
-#define TX_COMPILED
-#include "..\SuperLibs\TXLib.h"
-
-
 #include <stdio.h>
 #include "Common_Language.h"
 #include "Init_Language.h"
@@ -23,13 +19,10 @@ int main (int argc, char* argv[])
     DUMP_NAME_TABLE;
 
     //Lexeme_gluing (language_data);                                                                  //TODO make many word lexemes
-    $$ node* tree = GetGrammatic (language_data);
-    $(tree);
-    $$ DUMP_TREE  (tree);
+    node* tree = GetGrammatic (language_data);
+     DUMP_TREE  (tree);
 
     printf ("All Good!");
-    txDisableAutoPause ();
-
 }
 
 #undef DUMP_TOKEN

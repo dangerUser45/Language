@@ -4,35 +4,45 @@
 
 enum type_t     {NUM = 1, ID, OP};
 enum operations { 
-    ADD                   = 1,
-    SUB                   = 2,
-    MUL                   = 3, 
-    DIV                   = 4, 
-    COS                   = 5, 
-    SIN                   = 6, 
-    POW                   = 7, 
-    LOG                   = 8, 
-    LN                    = 9, 
-    EXP                   = 10, 
-    TAN                   = 11, 
+    ADDITTION             = 1,
+    SUBTRACTION           = 2,
+    DIVISION              = 3,
+    MULTIPLICATION        = 4,
+    ELEVATION             = 5,
+
+    COS                   = 6,
+    SIN                   = 7,
+    LOG                   = 8,
+    LN                    = 9,
+    EXP                   = 10,
+    TAN                   = 11,
+
     IF                    = 12,
     WHILE                 = 13,
     EQUALS                = 14,
+
     OPENING_CURLY_BRACKET = 15,
     CLOSING_CURLY_BRACKET = 16,
     OPENING_BRACKET       = 17,
     CLOSING_BRACKET       = 18,
-    CALL_VAR              = 19,
-    CALL_FUNCTION         = 20,
+
+    DECLARATION_ID        = 19,
+    DECLARATION_FUNCTION  = 20,
     BEGINING              = 21,
     ENDING                = 22,
-    PRE_EQUAL             = 24,
-    IN_EQUAL              = 25,
-    ADDITTION             = 26,
-    SUBTRACTION           = 27,
-    DIVISION              = 28,
-    MULTIPLICATION        = 29,
-    ELEVATION             = 30,
+    PRE_EQUAL             = 23,
+    IN_EQUAL              = 24, 
+    SEPARATOR             = 25,
+
+    EQUAL_COMPARE         = 26,
+    NOT_EQUALE_COMPARE    = 27,
+    LESS                  = 28,
+    LESS_OR_EQUALE        = 29,
+    MORE                  = 30,
+    MORE_OR_EQUAL         = 31,
+
+    BEGIN_PARAM_FUNC      = 32,
+    END_PARAM_FUNC        = 33,
 
 };
   
@@ -75,8 +85,10 @@ struct Language
 
 #if  (DEBUG == 1) 
     #define DBG( ... ) __VA_ARGS__
+    #define PRINT_TOKEN_POINTER printf ("" BLUE  "Token + pointer = %p\n" RESET "", context -> Token_array + context -> pointer)
 #else 
     #define DBG( ... )
+    #define PRINT_TOKEN_POINTER     
 #endif         
 
 const int NUM_OF_TOKEN = 128;

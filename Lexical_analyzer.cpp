@@ -1,6 +1,3 @@
-#define TX_COMPILED
-#include "..\SuperLibs\TXLib.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -59,20 +56,15 @@ static void Get_Token_Operator_ID (NAME_TABLE* name_table, node* Token_array,  c
     {
         (*pointer_addr)++;
     }
-        DBG (printf ("string + pointer_addr = %-20s\n", string__ + *pointer_addr);)
     size_t length_word = *pointer_addr - old_pointer;
-        DBG (printf ("old pointer = %zu ", old_pointer);)
-        DBG (printf ("pointer = %zu\n", *pointer_addr) ;)
-
-    if (length_word > MAX_NAME_ID || length_word <= 0)
+        if (length_word > MAX_NAME_ID || length_word <= 0)
         ;//SyntaxError (EXCEEDED_NUM_SYM_ID);                                     //TODO make SyntaxError
     else
     {
         int op = Compare_KeyWords (string__ + old_pointer, *pointer_addr - old_pointer);
-            //DBG (printf ("op = %d", op);)
+            
         if (op)
         {
-                DBG (printf ("pointer = %zu", *pointer_addr);)
             Token_array[*token_ptr].type  = OP;
             Token_array[*token_ptr].value.val_op = (operations) op;
         }
@@ -85,7 +77,6 @@ static void Get_Token_Operator_ID (NAME_TABLE* name_table, node* Token_array,  c
             (*name_table_ptr_addr)++;
         }
     }
-        //DBG (printf ("string + pointer_addr = %-20s\n", string__ + *pointer_addr);)
         //if (is_rus_alnum (string__[*pointer_addr]) || ispunct(string__[*pointer_addr])) assert (0);
     Skip_space (string__, pointer_addr);
     (*token_ptr)++;
@@ -102,9 +93,9 @@ static int Compare_KeyWords (const char* string__, size_t num_symbols)
         {"–јјјјјјј––––_еда_класть_в_рот" , CLOSING_CURLY_BRACKET, 29},
         {"залезать_на_дерево", OPENING_BRACKET, 18},
         {"слезать_с_дерево", CLOSING_BRACKET, 16},
-        {"хатеть_чтобы_<переменна€>_быть_<число>", CALL_VAR, 38},
+        {"хатеть_чтобы_быть", DECLARATION_ID, 17},
         {"=", EQUALS, 1},
-        {"залезть_на_ћјћќЌ“ј", CALL_FUNCTION, 18},
+        {"залезть_на_ћјћќЌ“ј", DECLARATION_FUNCTION, 18},
         {"’ј“≈“№  ј ј“№ Ќќ", IF, 16},
         {"следить_за_добыча_н€м_н€м", WHILE, 25},
         {"sin", SIN, 3},
@@ -114,9 +105,19 @@ static int Compare_KeyWords (const char* string__, size_t num_symbols)
         {"и_палажить_в", IN_EQUAL, 12},
         {"дабавить", ADDITTION, 8},
         {"попробовать", SUBTRACTION, 11},
-        {"понюхать", DIVISION, 15},
+        {"понюхать", DIVISION, 8},
         {"потрогать", MULTIPLICATION, 9},
-        {"—Ћќ∆Ќјјј", ELEVATION, 8}
+        {"—Ћќ∆Ќјјј", ELEVATION, 8},
+        {"√ЁЁ", SEPARATOR, 3},
+        {"съел", EQUAL_COMPARE, 4},
+        {"кусать", NOT_EQUALE_COMPARE, 6},
+        {"мало", LESS, 4},
+        {"сломать", LESS_OR_EQUALE, 7},
+        {"√”јјј", MORE, 5},
+        {"ЁЁџџџџ", MORE_OR_EQUAL, 6},
+        {"”ЁЁЁЁЁ", BEGIN_PARAM_FUNC,6},
+        {"јЏЏЏ", END_PARAM_FUNC, 4},
+
     };
 
     size_t number_op = sizeof (KeyWords) / sizeof (Key_word);

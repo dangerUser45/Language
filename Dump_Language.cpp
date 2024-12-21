@@ -1,9 +1,7 @@
-#define TX_COMPILED
-#include "..\SuperLibs\TXLib.h"
-
 #include "Common_Language.h"
 #include "Init_language.h"
 #include "Dump_Language.h"
+#include "SyntaxError.h"
 
 extern FILE* Log_File;
 extern FILE* Graph_File;
@@ -15,6 +13,7 @@ static void Dump_graph_init (node* node_);
 static void Dump_graph_recursive (node* Node, size_t rank);
 static void Draw_tree (node* Node);
 static bool Check_Name_Table (void* ptr);
+static const char* GetOpName (node* Node);
 
 //==================================================================================================
 int Dump_graphviz_language (void* ptr, GRAPH_PRINT object_print)
@@ -23,7 +22,7 @@ int Dump_graphviz_language (void* ptr, GRAPH_PRINT object_print)
 
     if (Check_Name_Table (ptr));
     else return 0;
-
+                 
     static size_t number_pic = 1;
 
     char* name_dot_utf_8 = (char*) calloc (256, sizeof (char));
@@ -46,9 +45,6 @@ int Dump_graphviz_language (void* ptr, GRAPH_PRINT object_print)
             NAME_TABLE* name_table = (NAME_TABLE*) ptr;
             fprintf (Log_File, "<b><fontsize =rgb(255, 0, 0)>\t\t\t\t\t\t\tNAME TABLE</fontsize></b>");
 
-            if (1) {
-                fprintf (Log_File, "NAME TABLE hasn't elements\n"); return 0; }
-
             Dump_name_table (name_table);
             break;
         }
@@ -62,6 +58,7 @@ int Dump_graphviz_language (void* ptr, GRAPH_PRINT object_print)
         case TREE:
         {
                     DBG(printf ("I in Dump() case: TREE ptr = %p\n", (node*)ptr);)
+            fprintf (Log_File, "<b><font color = #FF0000>\t\t\t\t\t\t\tTREE</fontsize></b>");
             node* tree = (node*) ptr;
             Dump_graph_init (tree);
             break;
@@ -96,7 +93,7 @@ static void Dump_table_token (node* node_)
     "{\n"
     "\trankdir = LR;\n"
     "\tnode[color = \"#d69950\", shape = \"Mrecord\", style = \"filled\" ,fillcolor=\"#ddcdba\"];\n"
-    "\tedge[color = \"#000000\"];\n");                                                        
+    "\tedge[color = \"#000000\"];\n\n");                                                        
         
     for (int i = 0;  node_[i].type != 0; i++)
     {
@@ -106,7 +103,7 @@ static void Dump_table_token (node* node_)
 
         if (node_ [i].type == OP)
         fprintf (Graph_File,  "" 
-    "\tnode_%p  [label= \" Type:\\n %s |  Value:\\n  %d | { Left:\\n %p| Right:\\n %p} \"];\n", node_ + i, "OP",  node_[i].value.val_op, node_[i].left, node_[i].right);
+    "\tnode_%p  [label= \" Type:\\n %s |  Value:\\n  %s | { Left:\\n %p| Right:\\n %p} \"];\n", node_ + i, "OP",  GetOpName(node_ + i), node_[i].left, node_[i].right);
 
         if (node_[i].type == ID)
         fprintf (Graph_File,  "" 
@@ -138,7 +135,7 @@ static void Dump_table_token (node* node_)
 
         if (node_ [i+1].type == OP)
         fprintf (Graph_File,  "" 
-    "\tnode_%p  [label= \" Type:\\n %s |  Value:\\n   %d  | { Left:\\n %p| Right:\\n %p} \"];\n", node_ + i + 1, "OP",  node_[i+1].value.val_op, node_[i+1].left, node_[i+1].right);
+    "\tnode_%p  [label= \" Type:\\n %s |  Value:\\n   %s  | { Left:\\n %p| Right:\\n %p} \"];\n", node_ + i + 1, "OP",  GetOpName(node_ + i + 1), node_[i+1].left, node_[i+1].right);
 
         if (node_[i+1].type == ID)
         fprintf (Graph_File,  "" 
@@ -147,7 +144,7 @@ static void Dump_table_token (node* node_)
     fprintf (Graph_File,  "" 
             "\tsubgraph cluster_%p {node_%p; label = \"Number: %zu\\n Addr: %p\"; color = \"white\";}\n\n", node_ + i + 1, node_ + i + 1, num_el, node_ + i + 1);
 
-    fprintf (Graph_File, "\tnode_%p -> node_%p;\n\n", node_ + i, node_ + i + 1);
+    fprintf (Graph_File, "\tnode_%p -> node_%p;\n\n\n", node_ + i, node_ + i + 1);
 
     }
 
@@ -200,7 +197,7 @@ static void Dump_name_table (NAME_TABLE* name_table)
     fprintf (Graph_File,  "" 
             "\tsubgraph cluster_%p {node_%p; label = \"Number: %zu \\nAddr: %p\"; color = \"white\";}\n\n", name_table + i + 1, name_table + i + 1, counter ,name_table + i + 1);
     
-    fprintf (Graph_File, "\tnode_%p -> node_%p;\n\n", name_table + i, name_table + i + 1);
+    fprintf (Graph_File, "\tnode_%p -> node_%p;\n\n\n", name_table + i, name_table + i + 1);
     }
 
     fprintf (Graph_File, "}");
@@ -301,12 +298,12 @@ void Draw_tree (node* Node)
 
     else if (Node -> type == ID){
             fprintf(Graph_File, ""
-        "\tnode_%p [ color = \"#CCCCFF\", style = \"filled\", fillcolor = \"#ff5fe0\", shape = \"Mrecord\", label = \"{ addr: %p | val = \'%zu\' | type = %s | { L:\\n addr: %p | R: \\n addr: %p } }\" ];\n",  Node, Node, Node -> value.id, "ID",      Node -> left, Node -> right);
+        "\tnode_%p [ color = \"#CCCCFF\", style = \"filled\", fillcolor = \"#ff5fe0\", shape = \"Mrecord\", label = \"{ addr: %p | val = %zu | type = %s | { L:\\n addr: %p | R: \\n addr: %p } }\" ];\n",  Node, Node, Node -> value.id, "ID",      Node -> left, Node -> right);
         }
 
     else if (Node -> type == OP){
         fprintf(Graph_File, ""
-        "\tnode_%p [ color = \"#FFC\",    style = \"filled\", fillcolor = \"#ecfd74\", shape = \"Mrecord\", label = \"{ addr: %p | val = \'%d\'  |  type = %s | { L:\\n addr: %p | R: \\n addr: %p } }\" ];\n", Node, Node, Node -> value.val_op, "OP",  Node -> left, Node -> right);
+        "\tnode_%p [ color = \"#FFC\",    style = \"filled\", fillcolor = \"#ecfd74\", shape = \"Mrecord\", label = \"{ addr: %p | val = %s  |  type = %s | { L:\\n addr: %p | R: \\n addr: %p } }\" ];\n", Node, Node, GetOpName(Node), "OP",  Node -> left, Node -> right);
         }
 }
 //=================================================================================================
@@ -317,3 +314,104 @@ bool Check_Name_Table (void* ptr)
     else return true;
 }
 //==================================================================================================
+const char* GetOpName (node* Node)
+{
+    assert(Node);
+    const char* text;
+    switch (Node -> value.val_op)
+    {
+    case ADDITTION:
+        text = "\\\"Add  :  '+' \\\""; return text;
+
+    case SUBTRACTION:
+        text = "\\\"Sub  :  '-' \\\""; return text;
+
+    case DIVISION:
+        text = "\\\"Div  :  '/' \\\""; return text;
+
+    case MULTIPLICATION:
+        text = "\\\"Mul  :  '*' \\\""; return text;
+    
+    case ELEVATION:
+        text = "\\\" ELevat  :  '^' \\\""; return text;
+    
+    case COS: 
+        text = "\\\"Cos\\\""; return text;
+    
+    case SIN:
+        text = "\\\"Sin\\\""; return text;
+
+    case LOG: 
+        text = "\\\"Log\\\""; return text;
+
+    case LN: 
+        text = "\\\"Ln\\\""; return text;
+
+    case EXP:
+        text = "\\\"Exp\\\""; return text;
+
+    case TAN:
+        text = "\\\"Tan\\\""; return text;
+
+    case IF:
+        text = "\\\"If\\\""; return text;
+
+    case WHILE:
+        text = "\\\"While\\\""; return text;
+
+    case EQUALS:
+        text = "\\\"Equals  :  '=' \\\""; return text;
+
+    case OPENING_CURLY_BRACKET:
+        text = "\\\"Op_C_BRACK :  '{' \\\""; return text;
+
+    case CLOSING_CURLY_BRACKET:
+        text = "\\\"Cl cur bracket  :  '}' \\\""; return text;
+
+    case OPENING_BRACKET:
+        text = "\\\"Op bracket  :  '(' \\\""; return text;
+
+    case CLOSING_BRACKET:
+        text = "\\\"Cl bracket  :  ')' \\\""; return text;
+
+    case DECLARATION_ID:
+        text = "\\\"Declaration id\\\""; return text;
+
+    case DECLARATION_FUNCTION:
+        text = "\\\"Declaration func\\\""; return text;
+
+    case BEGINING:
+        text = "\\\"Begin \\\""; return text;
+
+    case ENDING:
+        text = "\\\"End\\\""; return text;
+
+    case PRE_EQUAL:
+        text = "\\\"Pre equal\\\""; return text;
+
+    case IN_EQUAL:
+        text = "\\\"In equal  :  '=' \\\""; return text;
+
+    case SEPARATOR:
+        text = "\\\"Separator :  ';' \\\""; return text;
+
+    case EQUAL_COMPARE:
+        text = "\\\"Eq cmpr  :  '==' \\\""; return text;
+
+    case NOT_EQUALE_COMPARE:
+        text = "\\\"Not eq cmpr :  '!=' \\\""; return text;
+    case LESS:
+        text = "\\\" Less  :  '\\<' \\\""; return text;
+
+    case LESS_OR_EQUALE:
+        text = "\\\" Less or eq :  '\\<=' \\\""; return text;
+
+    case MORE:
+        text = "\\\" More  :  '\\>' \\\""; return text;
+
+    case MORE_OR_EQUAL:
+        text = "\\\" More or eq  :  '\\>=' \\\""; return text;
+     
+    default: SYNTAX_ERROR
+    }
+}
