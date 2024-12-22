@@ -322,7 +322,7 @@ node* Create_node (type_t type, double data, node* node_left, node* node_right)
     return new_node;
 }*/
 //==================================================================================================
-#pragma 
+
 bool Check_Comparison_marks (Context_parser* context)
 {
     if (context -> Token_array[context -> pointer].type != OP                                           ||
