@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "..\Processor\Onegin_for_proc\Onegin_General.h" 
 
-enum type_t     {NUM = 1, ID, OP};
+enum type_t     {NUM = 1, ID, OP, FILLER};
 enum operations { 
     ADDITTION             = 1,
     SUBTRACTION           = 2,
@@ -59,6 +59,7 @@ union VALUE
     double val_num;
     operations val_op;
     size_t id;
+    const char* filler;
 };
 
 struct node

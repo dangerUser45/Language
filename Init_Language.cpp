@@ -16,6 +16,23 @@ Language* Language_init (int argc ,char* argv[])
     Log_File = Create_file ("LOG_LANGUAGE.html");          
     fprintf (Log_File, "<pre>");
 
+    fprintf (Log_File , "<head>"
+                            "<style>"
+                                ".center{"
+                                    "display: grid;"    
+                                    "place-items: center;"
+                                    "height: 100vh;"
+                                "}"
+                            "</style>"
+                        "</head>"
+
+                        "<body>"
+                            "<div class=\"center\">"
+                                "<img src = build_language/Dump_lang/mem.jpg width = 20%%" 
+                                "alt=\"HTML Image\">"
+                            "</div>"
+                        "</body>");
+
     Language* lang_data = (Language*) calloc (1, sizeof (Language));
     if (!lang_data) { fprintf (Log_File, "ERROR IN %s: %d: lang_data = null\n", __FILE__, __LINE__); return 0; }
 

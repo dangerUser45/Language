@@ -17,7 +17,8 @@ static node* GetID                   (Context_parser* context);
 static node* GetCompare              (Context_parser* context);
 static node* GetDeclaration          (Context_parser* context);
 static node* GetCallFunc             (Context_parser* context);
-node* Create_node (type_t type, double data, node* node_left, node* node_right);
+static bool Check_Comparison_marks   (Context_parser* context);
+static node* Create_filler_node      (const char* text);
 
 extern FILE* Log_File;
 
@@ -28,20 +29,20 @@ node* GetGrammatic (Language* Lang_data)
     Context_parser context = {};
     context.Token_array = Token_array;
 
-        DBG(printf("Im in Get_Grammatic (): Token_array = %p, " GREEN "context = %p," RESET " Token_array + pointer = %p\n", Token_array, &context, Token_array + context.pointer);)
-
     if (Token_array[context.pointer].value.id != BEGINING) SYNTAX_ERROR
-        //DBG(printf ("\n%sGetGrammatic()%s: BEGINING = %zu, " GREEN "pointer = %zu" RESET "\n", RED, RESET, Token_array[pointer].value.id, pointer);)
     context.pointer++;
 
-    node* Node =  GetDeclaration (&context);
+    size_t declar_pointer = context.pointer;
+    node* Node_declare     = GetDeclaration(&context);
 
-    DBG(printf ("Token_array + pointer = %p", Token_array + context.pointer);)
+    node* Node_call_func   = GetCallFunc (&context);
+
     if (Token_array[context.pointer].value.id != ENDING)   SYNTAX_ERROR
     else
         context.pointer++;
 
-     return Node;
+    Token_array[declar_pointer + 1].left = Node_call_func;
+     return Token_array + declar_pointer;
 }
 //==================================================================================================
 node* GetDeclaration (Context_parser* context)
@@ -69,16 +70,35 @@ node* GetDeclaration (Context_parser* context)
 
     context -> pointer++; 
 
-    return Token_array + context -> pointer - 1;
+    return Node_id;
 }
 //==================================================================================================
 node* GetCallFunc (Context_parser* context)
 {
     node* Token_array = context -> Token_array;
+    size_t name_func_pointer = context -> pointer;
 
+    node* Node_name_func   = GetID (context);
+    node* Node = Token_array + name_func_pointer;
 
+    while (Token_array[context -> pointer].type != OP && Token_array[context -> pointer].value.val_op != END_PARAM_FUNC)    
+    {
+        if (Token_array[context -> pointer].type != ID)
+            SYNTAX_ERROR
+        else 
+        {
+            node* Node_name_param = GetID(context);
+            node* Node_param      = Create_filler_node ("param");
+            Node -> right         = Node_param;
+            Node_param ->left     = Node_name_param;
+            Node                  = Node_param;
+        }
+    }
 
+    Token_array[context -> pointer].left    = Node_name_func;   
+    context -> pointer++;
 
+    return Token_array + context -> pointer - 1;
 }
 //==================================================================================================
 node* GetCompare (Context_parser* context)
@@ -333,4 +353,16 @@ bool Check_Comparison_marks (Context_parser* context)
     return true;
 }
 
+//==================================================================================================
+node* Create_filler_node (const char* text)
+{
+    node* Node = (node*) calloc (1, sizeof (node));
+
+    Node -> type = FILLER;
+    Node -> value.filler = text;
+
+    printf ("%sAddr: param = %p%s", YELLOW, Node, RESET);   
+
+    return Node;
+}
 //==================================================================================================

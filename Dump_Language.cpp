@@ -38,6 +38,7 @@ int Dump_graphviz_language (void* ptr, GRAPH_PRINT object_print)
     Graph_File      = Create_file ("build_language/Dump_lang/Dot.txt");
     Graph_File_Utf8 = Create_file (name_dot_utf_8);
 
+
     switch (object_print)
     {
         case _NAME_TABLE:
@@ -235,7 +236,7 @@ void Dump_graph_recursive (node* Node, size_t rank)
     {
         Draw_tree (Node -> left);
         fprintf (Graph_File, ""   //!!!
-        "\tnode_%p  -> node_%p [color = \"#ff0000\", fontsize = 16];\n", Node, Node -> left);
+        "\tnode_%p  -> node_%p [color = \"#808080\", fontsize = 16];\n", Node, Node -> left);
     }
 
     else {
@@ -256,7 +257,7 @@ void Dump_graph_recursive (node* Node, size_t rank)
     {
         Draw_tree (Node -> right);
         fprintf(Graph_File, "\n" //!!!
-        "\tnode_%p  -> node_%p[color = \"#ff0000\", fontsize = 16];\n", Node, Node -> right);
+        "\tnode_%p  -> node_%p[color = \"#808080\", fontsize = 16];\n", Node, Node -> right);
     }
 
     else {
@@ -298,12 +299,17 @@ void Draw_tree (node* Node)
 
     else if (Node -> type == ID){
             fprintf(Graph_File, ""
-        "\tnode_%p [ color = \"#CCCCFF\", style = \"filled\", fillcolor = \"#ff5fe0\", shape = \"Mrecord\", label = \"{ addr: %p | val = %zu | type = %s | { L:\\n addr: %p | R: \\n addr: %p } }\" ];\n",  Node, Node, Node -> value.id, "ID",      Node -> left, Node -> right);
+        "\tnode_%p [ color = \"#c809a3\", style = \"filled\", fillcolor = \"#ff5fe0\", shape = \"Mrecord\", label = \"{ addr: %p | val = %zu | type = %s | { L:\\n addr: %p | R: \\n addr: %p } }\" ];\n",  Node, Node, Node -> value.id, "ID",      Node -> left, Node -> right);
         }
 
     else if (Node -> type == OP){
         fprintf(Graph_File, ""
-        "\tnode_%p [ color = \"#FFC\",    style = \"filled\", fillcolor = \"#ecfd74\", shape = \"Mrecord\", label = \"{ addr: %p | val = %s  |  type = %s | { L:\\n addr: %p | R: \\n addr: %p } }\" ];\n", Node, Node, GetOpName(Node), "OP",  Node -> left, Node -> right);
+        "\tnode_%p [ color = \"#ffd500\",    style = \"filled\", fillcolor = \"#ecfd74\", shape = \"Mrecord\", label = \"{ addr: %p | val = %s  |  type = %s | { L:\\n addr: %p | R: \\n addr: %p } }\" ];\n", Node, Node, GetOpName(Node), "OP",  Node -> left, Node -> right);
+        }
+
+    else if (Node -> type == FILLER /*&& strncmp((const char*) (Node -> value.filler), "param", 5)*/){
+        fprintf(Graph_File, ""
+        "\tnode_%p [ color = \"black\",  style = \"filled\", fillcolor = \"lightgrey\", shape = \"ellipse\", label = \"param\"];\n", Node);
         }
 }
 //=================================================================================================
@@ -321,96 +327,102 @@ const char* GetOpName (node* Node)
     switch (Node -> value.val_op)
     {
     case ADDITTION:
-        text = "\\\"Add  :  '+' \\\""; return text;
+        text = "\\\"Add  :  '+' \\\"";            return text;
 
     case SUBTRACTION:
-        text = "\\\"Sub  :  '-' \\\""; return text;
+        text = "\\\"Sub  :  '-' \\\"";            return text;
 
     case DIVISION:
-        text = "\\\"Div  :  '/' \\\""; return text;
+        text = "\\\"Div  :  '/' \\\"";            return text;
 
     case MULTIPLICATION:
-        text = "\\\"Mul  :  '*' \\\""; return text;
+        text = "\\\"Mul  :  '*' \\\"";            return text;
     
     case ELEVATION:
-        text = "\\\" ELevat  :  '^' \\\""; return text;
+        text = "\\\" ELevat  :  '^' \\\"";        return text;
     
     case COS: 
-        text = "\\\"Cos\\\""; return text;
+        text = "\\\"Cos\\\"";                     return text;
     
     case SIN:
-        text = "\\\"Sin\\\""; return text;
+        text = "\\\"Sin\\\"";                     return text;
 
     case LOG: 
-        text = "\\\"Log\\\""; return text;
+        text = "\\\"Log\\\"";                     return text;
 
     case LN: 
-        text = "\\\"Ln\\\""; return text;
+        text = "\\\"Ln\\\"";                      return text;
 
     case EXP:
-        text = "\\\"Exp\\\""; return text;
+        text = "\\\"Exp\\\"";                     return text;
 
     case TAN:
-        text = "\\\"Tan\\\""; return text;
+        text = "\\\"Tan\\\"";                     return text;
 
     case IF:
-        text = "\\\"If\\\""; return text;
+        text = "\\\"If\\\"";                      return text;
 
     case WHILE:
-        text = "\\\"While\\\""; return text;
+        text = "\\\"While\\\"";                   return text;
 
     case EQUALS:
-        text = "\\\"Equals  :  '=' \\\""; return text;
+        text = "\\\"Equals  :  '=' \\\"";         return text;
 
     case OPENING_CURLY_BRACKET:
-        text = "\\\"Op_C_BRACK :  '{' \\\""; return text;
+        text = "\\\"Op_C_BRACK :  '{' \\\"";      return text;
 
     case CLOSING_CURLY_BRACKET:
         text = "\\\"Cl cur bracket  :  '}' \\\""; return text;
 
     case OPENING_BRACKET:
-        text = "\\\"Op bracket  :  '(' \\\""; return text;
+        text = "\\\"Op bracket  :  '(' \\\"";     return text;
 
     case CLOSING_BRACKET:
-        text = "\\\"Cl bracket  :  ')' \\\""; return text;
+        text = "\\\"Cl bracket  :  ')' \\\"";     return text;
 
     case DECLARATION_ID:
-        text = "\\\"Declaration id\\\""; return text;
+        text = "\\\"Declaration id\\\"";          return text;
 
     case DECLARATION_FUNCTION:
-        text = "\\\"Declaration func\\\""; return text;
+        text = "\\\"Declaration func\\\"";        return text;
 
     case BEGINING:
-        text = "\\\"Begin \\\""; return text;
+        text = "\\\"Begin \\\"";                  return text;
 
     case ENDING:
-        text = "\\\"End\\\""; return text;
+        text = "\\\"End\\\"";                     return text;
 
     case PRE_EQUAL:
-        text = "\\\"Pre equal\\\""; return text;
+        text = "\\\"Pre equal\\\"";               return text;
 
     case IN_EQUAL:
-        text = "\\\"In equal  :  '=' \\\""; return text;
+        text = "\\\"In equal  :  '=' \\\"";       return text;
 
     case SEPARATOR:
-        text = "\\\"Separator :  ';' \\\""; return text;
+        text = "\\\"Separator :  ';' \\\"";       return text;
 
     case EQUAL_COMPARE:
-        text = "\\\"Eq cmpr  :  '==' \\\""; return text;
+        text = "\\\"Eq cmpr  :  '==' \\\"";       return text;
 
     case NOT_EQUALE_COMPARE:
-        text = "\\\"Not eq cmpr :  '!=' \\\""; return text;
+        text = "\\\"Not eq cmpr :  '!=' \\\"";    return text;
     case LESS:
-        text = "\\\" Less  :  '\\<' \\\""; return text;
+        text = "\\\"Less  :  '\\<' \\\"";         return text;
 
     case LESS_OR_EQUALE:
-        text = "\\\" Less or eq :  '\\<=' \\\""; return text;
+        text = "\\\"Less or eq :  '\\<=' \\\"";   return text;
 
     case MORE:
-        text = "\\\" More  :  '\\>' \\\""; return text;
+        text = "\\\"More  :  '\\>' \\\"";         return text;
 
     case MORE_OR_EQUAL:
-        text = "\\\" More or eq  :  '\\>=' \\\""; return text;
+        text = "\\\"More or eq  :  '\\>=' \\\"";  return text;
+
+    case BEGIN_PARAM_FUNC:
+        text = "\\\"Param \\\"";                  return text;
+
+    case END_PARAM_FUNC:
+        text = "\\\"End param func\\\"";          return text;
      
     default: SYNTAX_ERROR
     }
