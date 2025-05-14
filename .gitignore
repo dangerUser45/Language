@@ -1,0 +1,6 @@
+.gitattributes
+.cache
+./vscode
+.vscode
+
+/build
