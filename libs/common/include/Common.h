@@ -27,4 +27,4 @@ FILE*  OpenFile (const char *__restrict filename, const char *__restrict modes);
 int    CloseFile (FILE* file);
 size_t GetFileLength (const char* filename);
 
-void    Skip_space (const char* string__, size_t* pointer);
+const char* Skip_delimiters (const char* string);

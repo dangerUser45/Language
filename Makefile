@@ -22,7 +22,7 @@ LDFLAGS                     = -L$(LIB_COMMON_PATH)$(B) -l$(LIB_COMMON_NAME)
 
 EXEC_FILE          		    = $(B)$(TARGET).out
 
-CPPSRC             			= $(SRC)LanguageCtorDtor.cpp $(SRC)LanguageMain.cpp $(SRC)LanguageFrontend.cpp
+CPPSRC             			= $(SRC)LanguageCtorDtor.cpp $(SRC)LanguageFrontendMain.cpp $(SRC)LanguageFrontendFunc.cpp
 CPPOBJ             			= $(CPPSRC:$(SRC)%.cpp=$(B)%.o)
 CPPDEP             			= $(patsubst %.o, %.d, $(CPPOBJ))
 #==================================================================================

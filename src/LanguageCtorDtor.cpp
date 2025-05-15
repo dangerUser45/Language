@@ -4,10 +4,10 @@
 #include <Color.h>
 #include <Common.h>
 
-#include <LanguageGeneral.h>
-#include <LanguageErrors.h>
-#include <LanguageConsts.h>
-#include <LanguageCtorDtor.h>
+#include <LanguageFrontend.h>
+
+static ERRORS CheckArguments (int argc, char** argv);
+static ERRORS LoadCodeText   (char** argv, char* code_text, size_t length_file);
 
 FILE* lang_log_file;
 
@@ -28,9 +28,10 @@ Language* LanguageCtor (int argc, char** argv)
 
     node* token_array = (node*) calloc (NUM_OF_TOKEN, sizeof (node));
 
+    language->length_file = length_file;
     language->code_text   = code_text;
     language->name_table  = name_table;
-    language->Token_array = token_array;
+    language->token_array = token_array;
 
     return language;
 }
@@ -73,16 +74,10 @@ ERRORS LanguageDtor (Language* language)
 {
     free (language->code_text);
     free (language->name_table);
-    //free (language->Token_array);
+    free (language->token_array);
 
     free (language);
 
     return NO_ERRORS;
 }
 //==================================================================================================
-
-//TODO
-/***                                         ***\
-;           add free (Token_array);
-;
-\***                                         ***/

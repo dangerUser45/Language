@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <sys/stat.h>
+#include <string.h>
 
 #ifdef ASSERT_ON
 #include <errno.h>
@@ -51,10 +52,12 @@ size_t GetFileLength (const char* filename)
     return file_info.st_size;
 }
 //==================================================================
-const char* Skip_space (const char* string)
+const char* Skip_delimiters (const char* string)
 {
-    while (*string != ' ')
-        string++;
+    static const char* delimiters = "\n\t\r ";
+
+    while (strchr (delimiters, *string))
+        ++string;
 
     return string;
 }
