@@ -54,9 +54,7 @@ size_t GetFileLength (const char* filename)
 //==================================================================
 const char* Skip_delimiters (const char* string)
 {
-    static const char* delimiters = "\n\t\r ";
-
-    while (strchr (delimiters, *string))
+    while (*string == '\n' || *string == '\r' || *string == '\t' || *string == ' ')
         ++string;
 
     return string;

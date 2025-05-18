@@ -8,6 +8,10 @@ const int NUM_OF_TOKEN = 4096;
 
 const int MAX_LENGTH_OP = 256;
 
+inline const char* NAME_LANGUAGE_LOG_FILE = "dump/Frontend_log.html";
+inline const char* NAME_LANGUAGE_GRAPHVIZ_FILE = "dump/Graphviz_dot/Frontend_graphviz.txt";
+
+
 typedef double val_t;
 enum type_t {NUM = 1, ID, OP, FILLER};
 
@@ -54,6 +58,7 @@ enum operations
     BEGIN_PARAM_FUNC      = 32,
     END_PARAM_FUNC        = 33,
 
+    COMMENTS              = 34,
 };
 
 union VALUE
@@ -80,6 +85,9 @@ struct NAME_TABLE
 struct Language
 {
     size_t length_file;
+    size_t token_number;
+    size_t name_table_number;
+
     char* code_text;
     node* token_array;
     NAME_TABLE* name_table;
@@ -93,6 +101,12 @@ struct Key_word
 
 };
 
+struct Context_parser
+{
+    node* token_array;
+    size_t pointer;
+};
+
 enum ERRORS
 {
     NO_ERRORS,
@@ -101,6 +115,7 @@ enum ERRORS
 enum SYNTAX_ERRORS
 {
     TOO_LONG_WORD,
+    DBG_ERROR,
 
 };
 

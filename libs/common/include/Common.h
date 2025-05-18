@@ -20,7 +20,8 @@
     #define DBG( ... )
 #endif
 
-#define $(var, specifier) {printf (#var " = %" #specifier "\n", var);}
+#define z(var, specifier) {fprintf (stderr, BLUE #var " = %" #specifier RESET "\n", var);}
+#define zz {fprintf (stderr, "%s:%d\n", __FILE__, __LINE__);}
 
 
 FILE*  OpenFile (const char *__restrict filename, const char *__restrict modes);

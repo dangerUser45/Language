@@ -22,7 +22,7 @@ LDFLAGS                     = -L$(LIB_COMMON_PATH)$(B) -l$(LIB_COMMON_NAME)
 
 EXEC_FILE          		    = $(B)$(TARGET).out
 
-CPPSRC             			= $(SRC)LanguageCtorDtor.cpp $(SRC)LanguageFrontendMain.cpp $(SRC)LanguageFrontendFunc.cpp
+CPPSRC             			= $(SRC)LanguageCtorDtor.cpp $(SRC)LanguageFrontendMain.cpp $(SRC)LanguageFrontendFunc.cpp $(SRC)LanguageFrontendDump.cpp
 CPPOBJ             			= $(CPPSRC:$(SRC)%.cpp=$(B)%.o)
 CPPDEP             			= $(patsubst %.o, %.d, $(CPPOBJ))
 #==================================================================================
@@ -95,4 +95,3 @@ clearall:
 	rm -rf $(B)* $(D)*.html
 	$(MAKE) -C $(LIB_COMMON_PATH) clear
 #----------------------------------------------------------------------------------
-
