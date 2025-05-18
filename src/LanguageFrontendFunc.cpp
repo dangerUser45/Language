@@ -37,15 +37,11 @@ ERRORS Language_LexicalAnalyser (Language* language)
 {
     const char* string = language->code_text;
     node* token_array  = language->token_array;
-    size_t length_file = language->length_file;
     size_t token_index = 0;
     size_t name_table_index = 0;
 
-    z(token_array, p); //FIXME
-    fprintf (stderr, "language->code_text:\n%s", language->code_text); //FIXME
-
     Skip_delimiters (string);
-    zz // FIXME
+
     while (*string != '\0')
     {
         if (isdigit (*string))
@@ -77,7 +73,6 @@ ERRORS GetTokenNum (node* token_array, const char** string, size_t* token_index)
 //==================================================================
 const char* GetToken_Operator_or_ID (Language* language, const char* string, size_t* token_index, size_t* name_table_index)
 {
-    zz // FIXME
     node* token_array = language->token_array;
     NAME_TABLE* name_table = language->name_table;
 
@@ -86,9 +81,7 @@ const char* GetToken_Operator_or_ID (Language* language, const char* string, siz
     while (!strchr (delimiters, *string))
         ++string;
 
-    fprintf (stderr, BLUE "string = '%c'" RESET "\n", *string); //FIXME
     size_t length_word = (size_t)string - (size_t)start;
-    z(length_word, zu) //FIXME
 
     if (length_word > MAX_NAME_ID)
         SYNTAX_ERROR (TOO_LONG_WORD)
@@ -113,7 +106,6 @@ const char* GetToken_Operator_or_ID (Language* language, const char* string, siz
         }
 
         string = Skip_delimiters (string);
-        fprintf (stderr, BLUE "after skip delim: string = '%c'" RESET "\n", *string); //FIXME
 
         (*token_index)++;
     }
@@ -125,7 +117,6 @@ static int Compare_KeyWords (const char* string, size_t length_word)
 {
     #define NOT_OP 0
 
-    zz // FIXME
     static Key_word KeyWords [] = {
         {"Breakfast:", BEGINING, 10},
         {"want-millpops", OPENING_CURLY_BRACKET, 13},
@@ -145,7 +136,7 @@ static int Compare_KeyWords (const char* string, size_t length_word)
         {"/", DIVISION, 1},
         {"*", MULTIPLICATION, 1},
         {"^", ELEVATION, 1},
-        {"skip", SEPARATOR, 4},
+        {"skip", SEPARATOR_PARAM, 4},
         {"==", EQUAL_COMPARE, 2},
         {"!=", NOT_EQUALE_COMPARE, 2},
         {"<", LESS, 1},
@@ -154,7 +145,9 @@ static int Compare_KeyWords (const char* string, size_t length_word)
         {">=", MORE_OR_EQUAL, 2},
         {"", BEGIN_PARAM_FUNC,1},
         {"", END_PARAM_FUNC, 1},
-        {"|skip:", COMMENTS, 6}
+        {"|skip:", COMMENTS, 6},
+        {"norm", SEPARATOR_IN_DECLARE_1, 4},
+        {"cringe", SEPARATOR_IN_DECLARE_2, 6}
     };
 
     size_t number_op = sizeof (KeyWords) / sizeof (Key_word);
@@ -167,7 +160,6 @@ static int Compare_KeyWords (const char* string, size_t length_word)
 
     #undef NOT_OP
 }
-
 //==================================================================
 void SyntaxError (SYNTAX_ERRORS error)
 {
@@ -177,7 +169,10 @@ void SyntaxError (SYNTAX_ERRORS error)
 //==================================================================
 ERRORS Language_SyntaxAnalyser (Language* language)
 {
-
+    Context_parser context = {.token_array = language->token_array, .pointer = 0};
+    node* node = GetExpression (&context);
+    language->parent_node = node;
+    z(node, p)//FIXME
 
     return NO_ERRORS;
 }
@@ -199,7 +194,7 @@ node* GetDeclaration (Context_parser* context)
 
     node* Node_id = GetID (context);
 
-    if (token_array[context -> pointer].type != OP ||  token_array[context -> pointer].value.val_op != SEPARATOR)
+    if (token_array[context -> pointer].type != OP ||  token_array[context -> pointer].value.val_op != SEPARATOR_PARAM)
         SYNTAX_ERROR(DBG_ERROR)
 
     token_array[context -> pointer].left = Node_op_declar;
@@ -284,7 +279,7 @@ node* GetAssignment (Context_parser* context)
 
     node* node_val2 = GetID (context);
 
-    if (token_array[context -> pointer].type != OP || token_array[context -> pointer].value.val_op != SEPARATOR)
+    if (token_array[context -> pointer].type != OP || token_array[context -> pointer].value.val_op != SEPARATOR_PARAM)
         SYNTAX_ERROR(DBG_ERROR);
 
     token_array[context -> pointer].left  = token_array + old_pointer;
@@ -479,17 +474,15 @@ node* Create_node (type_t type, double data, node* node_left, node* node_right)
     return new_node;
 }*/
 //==================================================================================================
-
 bool Check_Comparison_marks (Context_parser* context)
 {
-    if (context -> token_array[context -> pointer].type != OP                                           ||
-       ((const int) EQUAL_COMPARE > (const int) context -> token_array[context -> pointer].value.val_op ||
-        (const int) MORE_OR_EQUAL < (const int) context -> token_array[context -> pointer].value.val_op  ))
+    if (context -> token_array[context -> pointer].type != OP                    ||
+       (EQUAL_COMPARE >  context -> token_array[context -> pointer].value.val_op ||
+        MORE_OR_EQUAL <  context -> token_array[context -> pointer].value.val_op ))
         return false;
 
     return true;
 }
-
 //==================================================================================================
 node* Create_filler_node (const char* text)
 {

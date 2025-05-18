@@ -9,15 +9,15 @@
 //==================================================================
 int main (int argc, char** argv)
 {
-    zz // FIXME
     Language* language = LanguageCtor (argc, argv);
-    zz // FIXME
 
     Language_LexicalAnalyser (language);
-    zz // FIXME
     LanguageDump (language);
-    zz // FIXME
-    //Language_SyntaxAnalyser  (language);
+    LanguageGraphDump (language);
+    LanguageGraphDump (language);
+
+    Language_SyntaxAnalyser  (language);
+    LanguageGraphDump (language);
 
     LanguageDtor (language);
     fprintf (stderr, ORANGE "OK %s:%d\n" RESET, __FILE__, __LINE__);

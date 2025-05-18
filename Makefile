@@ -3,6 +3,8 @@ TARGET                      = Language
 SRC                			= src/
 B                  			= build/
 D                  			= dump/
+G                           = Graphviz_dot/
+IMAGES                      = images/
 LIB_PATH                  	= libs/
 
 LIB_COMMON_NAME             = Common
@@ -76,7 +78,6 @@ $(B)%.o: $(SRC)%.cpp
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -MMD -MT '$@ $(@:.o=.d)' -c $< -o $@
 -include $(CPPDEP)
-
 #----------------------------------------------------------------------------------
 
 run: $(EXEC_FILE)
@@ -88,10 +89,10 @@ memcheck: $(EXEC_FILE)
 #----------------------------------------------------------------------------------
 
 clear:
-	rm -rf $(B)* $(D)*.html
+	rm -rf $(B)* $(D)*.html  $(G)*.txt $(G)$(IMAGES)
 #----------------------------------------------------------------------------------
 
 clearall:
-	rm -rf $(B)* $(D)*.html
+	rm -rf $(B)* $(D)*.html  $(D)$(G)*.txt $(D)$(G)$(IMAGES)*
 	$(MAKE) -C $(LIB_COMMON_PATH) clear
 #----------------------------------------------------------------------------------

@@ -12,6 +12,29 @@ extern FILE* language_graphviz_file;
 
 static size_t images_counter = 0;
 
+static void DumpTokenArray (Language* language);
+static void DumpNameTable  (Language* language);
+
+void CreateFrontendDotContext (Language* language);
+
+static const char* GetColor (type_t type);
+static const char* GetTypeNode (type_t type);
+static const char* GetValue (Language* language, node* node);
+static const char* GetOP (operations op_code);
+
+static ERRORS ConsoleCommandCallDot (PRINT_OBJ object);
+static ERRORS PrintHtmlFrontendIntro ();
+static ERRORS LanguageAddImages (PRINT_OBJ object);
+
+static void PrintNameTable (Language* language);
+static void PrintFrontendIntro (PRINT_OBJ object);
+static void PrintTokenArray (Language* language);
+static void PrintOneTokenContext (Language* language, node* node, size_t token_number);
+static void PrintOneTokenTree (Language* language, node* node);
+
+static void PrintAST_Tree (Language* language);
+static void PrintOneNode (Language* language, node* node);
+
 //==================================================================================================
 void DumpTokenArray (Language* language)
 {
@@ -79,7 +102,10 @@ void LanguageDump (Language* language)
 //==================================================================================================
 void LanguageGraphDump (Language* language)
 {
-    static size_t images_counter = 0;
+
+    if (images_counter == 0)
+        PrintHtmlFrontendIntro ();
+    ++images_counter;
 
     language_graphviz_file = freopen (NAME_LANGUAGE_GRAPHVIZ_FILE, "w", language_graphviz_file);
 
@@ -88,35 +114,64 @@ void LanguageGraphDump (Language* language)
 
     CreateFrontendDotContext (language);
     ConsoleCommandCallDot (NAME_TABLE_AND_TOKENS);
+    LanguageAddImages (NAME_TABLE_AND_TOKENS);
 
-    if (images_counter == 1)
-        PrintHtmlFrontendIntro ();
+    if (language->parent_node != NULL )
+    {
+        language_graphviz_file = freopen (NAME_LANGUAGE_GRAPHVIZ_FILE, "w", language_graphviz_file);
+        setvbuf      (language_log_file, NULL, _IONBF, 0);  // Отключение буферизации
+        setvbuf (language_graphviz_file, NULL, _IONBF, 0);  // Отключение буферизации
 
-
-    LanguageAddImages ();
+        PrintAST_Tree (language);
+        ConsoleCommandCallDot (TREE);
+        LanguageAddImages (TREE);
+    }
 }
 //==================================================================================================
 void CreateFrontendDotContext (Language* language)
 {
+    PrintFrontendIntro (NAME_TABLE_AND_TOKENS);
+
+    PrintTokenArray (language);
+    PrintNameTable (language);
+
+    fprintf (language_graphviz_file, "}");
+}
+//==================================================================================================
+void PrintFrontendIntro (PRINT_OBJ object)
+{
+    const char* rankdir = 0;
+    if (object == TREE)
+        rankdir = "TB";
+    else
+        rankdir = "LR";
+
     fprintf (language_graphviz_file, ""
     "digraph\n"
     "{\n\t"
-        "rankdir  = LR\n\t                          // Горизонтальная ориентация"
-        "newrank  = true\n\t                        // Улучшенный алгоритм ранжирования"
-        "compound = true\n\n\t                      // Разрешить сложные связи"
+        "rankdir  = %s                        // Горизонтальная ориентация\n\t"
+        "newrank  = true                      // Улучшенный алгоритм ранжирования\n\t"
+        "compound = true                      // Разрешить сложные связи\n\n\t"
 
-        "nodesep  = 2.0\n\t                         // Расстояние между узлами"
-        "ranksep  = 1.0\n\n\t                       // Расстояние между уровнями"
+        "nodesep  = 1.0                       // Расстояние между узлами\n\t"
+        "ranksep  = 0.5                       // Расстояние между уровнями\n\n\t"
 
-        "graph [fontname=\"Helvetica\"]\n\n\t       // Шрифт для всего графа"
+        "graph [fontname=\"Helvetica\"]       // Шрифт для всего графа\n\n\t"
 
-        "bgcolor   = \"#f5e6cc\"\n\t                // Цвет фона - светло-синий"
-        "fontcolor = \"black\"\n\n\t                // Цвет текста"
+        "bgcolor   = \"#f5e6cc\"              // Цвет фона - светло-синий\n\t"
+        "fontcolor = \"black\"                // Цвет текста\n\n\t"
 
         "node [shape = Mrecord, style = filled, color = black];\n\t"
-        "edge [color = black];\n\n\t");
+        "edge [color = black];\n\n\t", rankdir);
+}
+//==================================================================================================
+void PrintNameTable (Language* language)
+{
+    size_t name_table_number = language->name_table_number;
 
-        fprintf (language_graphviz_file, ""
+    if (name_table_number != 0)
+    {
+        fprintf (language_graphviz_file, "\n\t"
         "subgraph cluster_Name_table\n\t"
         "{\n\t\t"
             "fontsize = 23\n\t\t"
@@ -124,23 +179,30 @@ void CreateFrontendDotContext (Language* language)
             "node [shape = Mrecord, fillcolor = \"#a64ac9\"];\n\t\t"
             "color = \"#f5e6cc\";\n\n\t\t");
 
-            size_t name_table_number = language->name_table_number;
             for (size_t i = 0; i < name_table_number; ++i)
                 fprintf (language_graphviz_file, ""
             "subgraph cluster_%zu\n\t\t"
             "{\n\t\t\t"
-                "elem_%zu[label = \"addr = %p | ID = \"%s\"];\n\t\t\t"
+                "elem_%zu[label = \"addr = %p | ID = \\\"%s\\\" \"];\n\t\t\t"
                 "label = \"%zu\";\n\t\t\t"
                 "fontsize = 16\n\t\t"
             "}\n\n\t\t", i, i, &language->name_table[i], language->name_table[i].name_id, i);
 
             for (size_t i = 0; i < name_table_number - 1; ++i)
                 fprintf (language_graphviz_file, ""
-            "elem_%zu -> elem_%zu", i, i + 1);
+            "elem_%zu -> elem_%zu\n\t\t", i, i + 1);
 
-        fprintf (language_graphviz_file, ""
-        "}\n\n\t");
+        fprintf (language_graphviz_file, "\n\t"
+        "}\n");
+    }
+}
+//==================================================================================================
+void PrintTokenArray (Language* language)
+{
+    size_t token_number = language->token_number;
 
+    if (token_number != 0)
+    {
         fprintf (language_graphviz_file, ""
         "subgraph cluster_Token_array\n\t"
         "{\n\t\t"
@@ -148,26 +210,111 @@ void CreateFrontendDotContext (Language* language)
             "label = \"Token array\"\n\t\t"
             "color = \"#f5e6cc\"\n\n\t\t");
 
-            size_t token_number = language->token_number;
             for (size_t i = 0; i < token_number; ++i)
-
-            fprintf (language_graphviz_file, ""
-            "subgraph cluster_token_%zu\n\t\t"
-            "{\n\t\t\t"
-                "node [fillcolor = \"%s\"]\n\n\t\t\t" // GetColor
-
-                "elem__token_%zu [label = \"addr: %p | node type = %s | value = %s | node left: %p | node right: %p \"]\n\t\t\t"
-                "label = \"%zu\"\n\t\t\t"
-                "fontsize = 16\n\t\t"
-            "}\n\n\t\t", i, GetColor (language->token_array[i].type), i, &language->token_array[i], GetTypeNode(language->token_array[i].type), GetValue(&language->token_array[i]), language->token_array[i].left, language->token_array[i].right, i);
+                PrintOneTokenContext (language, &language->token_array[i],  i);
 
         for (size_t i = 0; i < token_number - 1; ++i)
             fprintf (language_graphviz_file, ""
-            "elem_%zu -> elem_%zu\n\t\t", i, i + 1);
+            "elem_token_%zu -> elem_token_%zu\n\t\t", i, i + 1);
 
         fprintf (language_graphviz_file, "\n\t"
-        "}\n"
-    "}");
+        "}\n");
+    }
+}
+//==================================================================================================
+void PrintOneTokenContext (Language* language, node* node, size_t token_number)
+{
+    fprintf (language_graphviz_file, ""
+    "subgraph cluster_token_%zu\n\t\t"
+    "{\n\t\t\t"
+        "node [fillcolor = \"%s\"]\n\n\t\t\t" // GetColor
+
+        "elem_token_%zu [label = \" addr: %p | node type = %s | value = %s | node left: %p | node right: %p \"]\n\t\t\t"
+        "label = \"%zu\"\n\t\t\t"
+        "fontsize = 16\n\t\t"
+    "}\n\n\t\t", token_number,
+                GetColor (node->type),
+                token_number,
+                node,
+                GetTypeNode(node->type),
+                GetValue(language, node),
+                node->left,
+                node->right,
+                token_number);
+}
+//==================================================================================================
+void PrintOneTokenTree (Language* language, node* node)
+{
+    if (node == NULL)
+        return;
+
+    fprintf (language_graphviz_file, ""
+    "subgraph cluster_token_%zu\n\t\t"
+    "{\n\t\t\t"
+        "node [fillcolor = \"%s\"]\n\n\t\t\t" // GetColor
+        "label = \"\"\n\t\t\t"
+        "elem_token_%zu [label = \" { addr: %p | node type = %s | value = %s | node left: %p | node right: %p } \"]\n\t\t\t"
+        "fontsize = 16\n\t\t"
+    "}\n\n\t\t", (size_t)node,
+                GetColor (node->type),
+                (size_t)node,
+                node,
+                GetTypeNode(node->type),
+                GetValue(language, node),
+                node->left,
+                node->right);
+}
+//==================================================================================================
+void PrintAST_Tree (Language* language)
+{
+    assert (language);
+
+    node* parent_node = language->parent_node;
+
+    if (parent_node->left  != NULL ||
+        parent_node->right != NULL)
+    {
+        PrintFrontendIntro (TREE);
+
+        fprintf (language_graphviz_file, ""
+        "subgraph cluster_AST_Tree\n\t"
+	    "{\n\t\t"
+            "fontsize = 23\n\t\t"
+            "label = \"AST Tree\"\n\t\t"
+            "color = \"#f5e6cc\"\n\n\t\t");
+
+        PrintOneTokenTree (language, parent_node);
+        PrintOneNode (language, parent_node);
+
+        fprintf (language_graphviz_file,""
+        "\n\t}\n"
+        "}\n");
+    }
+}
+//==================================================================================================
+void PrintOneNode (Language* language, node* node)
+{
+    if (node == NULL)
+        return;
+
+    if (node->left != NULL)
+    {
+        PrintOneTokenTree (language, node->left);
+        fprintf (language_graphviz_file, ""
+        "elem_token_%zu -> elem_token_%zu\n\t\t",
+        (size_t)node, (size_t)node->left );
+    }
+
+    if (node->right != NULL)
+    {
+        PrintOneTokenTree (language, node->right);
+        fprintf (language_graphviz_file, ""
+        "elem_token_%zu -> elem_token_%zu\n\t\t",
+        (size_t)node, (size_t)node->right);
+    }
+
+    PrintOneNode (language,node->left);
+    PrintOneNode (language, node->right);
 }
 //==================================================================================================
 const char* GetColor (type_t type)
@@ -216,9 +363,9 @@ const char* GetTypeNode (type_t type)
     return 0;
 }
 //==================================================================================================
-const char* GetValue (node* node)
+const char* GetValue (Language* language, node* node)
 {
-    char* buffer = (char*) calloc (128, sizeof (char));
+    char* buffer = (char*) calloc (512, sizeof (char));
 
     type_t type = node->type;
     switch (type)
@@ -230,15 +377,15 @@ const char* GetValue (node* node)
         }
 
         case ID:
-            sprintf (buffer, "%zu", node->value.id);
+            sprintf (buffer, "%zu (\\\"%s\\\")", node->value.id, language->name_table[node->value.id].name_id);
             return buffer;
 
         case OP:
-            sprintf (buffer, "%d (\"%s\")", node->value.val_op, GetOP (node->value.val_op));
+            sprintf (buffer, "%d (\\\"%s\\\")", node->value.val_op, GetOP (node->value.val_op));
             return buffer;
 
         case FILLER:
-        sprintf (buffer, "\"%s\"", node->value.filler);
+        sprintf (buffer, "\\\"%s\\\"", node->value.filler);
             return buffer;
 
         default:
@@ -309,8 +456,14 @@ const char* GetOP (operations op_code)
         case ELEVATION:
             return "^";
 
-        case SEPARATOR:
+        case SEPARATOR_PARAM:
             return "skip";
+
+        case SEPARATOR_IN_DECLARE_1:
+            return "norm";
+
+        case SEPARATOR_IN_DECLARE_2:
+            return "cringe";
 
         case EQUAL_COMPARE:
             return "==";
@@ -335,6 +488,9 @@ const char* GetOP (operations op_code)
 
         case COMMENTS:
             return "|skip:";
+
+        default:
+            return 0;
     }
 
     return 0;
@@ -395,13 +551,15 @@ ERRORS PrintHtmlFrontendIntro ()
 
     return NO_ERRORS;
 }//==================================================================================================
-ERRORS LanguageAddImages ()
+ERRORS LanguageAddImages (PRINT_OBJ object)
 {
-    fprintf (language_log_file, "\n"
-    "<img src = \"../dump/Graphviz_dot/images/frame_%zu/img_context_%zu.svg\" class = \"center-horizontally\"><br><br>\n", images_counter, images_counter);
+    if (object == NAME_TABLE_AND_TOKENS)
+        fprintf (language_log_file, "\n"
+        "<img src = \"../dump/Graphviz_dot/images/frame_%zu/img_context_%zu.svg\" style = \"width: 200%%;\" class = \"center-horizontally\"><br><br>\n", images_counter, images_counter);
 
-    fprintf (language_log_file, "\n"
-    "<img src = \"../dump/Graphviz_dot/images/frame_%zu/img_tree_%zu.svg\" class = \"center-horizontally\"><br><br>\n",    images_counter, images_counter);
+    else
+        fprintf (language_log_file, ""
+        "<img src = \"../dump/Graphviz_dot/images/frame_%zu/img_tree_%zu.svg\" style = \"width: 50%%;\" class = \"center-horizontally\"><br><br>\n\n",    images_counter, images_counter);
 
     return NO_ERRORS;
 }

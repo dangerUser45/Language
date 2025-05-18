@@ -22,7 +22,7 @@ Language* LanguageCtor (int argc, char** argv)
 
     Language* language = (Language*) calloc (1, sizeof (Language));
 
-    size_t length_file = GetFileLength (argv[1]); z(length_file, zu) // FIXME
+    size_t length_file = GetFileLength (argv[1]);
 
     // +1 для '\0'
     char* code_text = (char*) calloc (length_file + 1, sizeof (char));
@@ -37,11 +37,8 @@ Language* LanguageCtor (int argc, char** argv)
     language->name_table  = name_table;
     language->token_array = token_array;
 
-    DBG
-    (
-        language_log_file      = OpenFile (NAME_LANGUAGE_LOG_FILE,      "w");
-        language_graphviz_file = OpenFile (NAME_LANGUAGE_GRAPHVIZ_FILE , "w");
-    )
+    language_log_file      = OpenFile (NAME_LANGUAGE_LOG_FILE,      "w");
+    language_graphviz_file = OpenFile (NAME_LANGUAGE_GRAPHVIZ_FILE , "w");
 
     return language;
 }
@@ -82,11 +79,10 @@ ERRORS LoadCodeText (char** argv, char* code_text, size_t length_file)
 //==================================================================================================
 ERRORS LanguageDtor (Language* language)
 {
-    DBG
-    (
-        CloseFile (language_log_file);
-        CloseFile (language_graphviz_file);
-    )
+
+    CloseFile (language_log_file);
+    CloseFile (language_graphviz_file);
+
 
     free (language->code_text);
     free (language->name_table);

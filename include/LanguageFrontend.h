@@ -11,54 +11,51 @@ const int MAX_LENGTH_OP = 256;
 inline const char* NAME_LANGUAGE_LOG_FILE = "dump/Frontend_log.html";
 inline const char* NAME_LANGUAGE_GRAPHVIZ_FILE = "dump/Graphviz_dot/Frontend_graphviz.txt";
 
-
 typedef double val_t;
 enum type_t {NUM = 1, ID, OP, FILLER};
 
 const int MAX_NAME_ID = 256;
 enum operations
 {
-    ADDITTION             = 1,
-    SUBTRACTION           = 2,
-    DIVISION              = 3,
-    MULTIPLICATION        = 4,
-    ELEVATION             = 5,
+    ADDITTION               = 1,
+    SUBTRACTION             = 2,
+    DIVISION                = 3,
+    MULTIPLICATION          = 4,
+    ELEVATION               = 5,
 
-    COS                   = 6,
-    SIN                   = 7,
-    LOG                   = 8,
-    LN                    = 9,
-    EXP                   = 10,
-    TAN                   = 11,
+    COS                     = 6,
+    SIN                     = 7,
 
-    IF                    = 12,
-    WHILE                 = 13,
-    EQUALS                = 14,
+    IF                      = 8,
+    WHILE                   = 9,
+    EQUALS                  = 10,
 
-    OPENING_CURLY_BRACKET = 15,
-    CLOSING_CURLY_BRACKET = 16,
-    OPENING_BRACKET       = 17,
-    CLOSING_BRACKET       = 18,
+    OPENING_CURLY_BRACKET   = 11,
+    CLOSING_CURLY_BRACKET   = 12,
+    OPENING_BRACKET         = 13,
+    CLOSING_BRACKET         = 14,
 
-    DECLARATION_ID        = 19,
-    DECLARATION_FUNCTION  = 20,
-    BEGINING              = 21,
-    ENDING                = 22,
-    PRE_EQUAL             = 23,
-    IN_EQUAL              = 24,
-    SEPARATOR             = 25,
+    DECLARATION_ID          = 15,
+    DECLARATION_FUNCTION    = 16,
+    BEGINING                = 17,
+    ENDING                  = 18,
+    PRE_EQUAL               = 19,
+    IN_EQUAL                = 20,
+    SEPARATOR_PARAM         = 21,
+    SEPARATOR_IN_DECLARE_1  = 22,
+    SEPARATOR_IN_DECLARE_2  = 23,
 
-    EQUAL_COMPARE         = 26,
-    NOT_EQUALE_COMPARE    = 27,
-    LESS                  = 28,
-    LESS_OR_EQUALE        = 29,
-    MORE                  = 30,
-    MORE_OR_EQUAL         = 31,
+    EQUAL_COMPARE           = 24,
+    NOT_EQUALE_COMPARE      = 25,
+    LESS                    = 26,
+    LESS_OR_EQUALE          = 27,
+    MORE                    = 28,
+    MORE_OR_EQUAL           = 29,
 
-    BEGIN_PARAM_FUNC      = 32,
-    END_PARAM_FUNC        = 33,
+    BEGIN_PARAM_FUNC        = 30,
+    END_PARAM_FUNC          = 31,
 
-    COMMENTS              = 34,
+    COMMENTS                = 32,
 };
 
 union VALUE
@@ -91,6 +88,8 @@ struct Language
     char* code_text;
     node* token_array;
     NAME_TABLE* name_table;
+
+    node* parent_node;
 };
 
 struct Key_word
