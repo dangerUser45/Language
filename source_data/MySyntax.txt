@@ -1,36 +1,14 @@
-New language:
-
-начало проги             - "Breakfast:"
-конец                    - "end"
-открывающаяся скобка "{" - "want_millpops"
-открывающаяся скобка "}" - "dirty"
-
-Объявл переменной        - "bombardiro-krokodilo"
-объявление функции       - "is_the_base"
-
-знак "+"                 - "+vibe"
-знак "-"                 - "-vibe"
-знак "/"                 - "/"
-знак "*"                 - "*"
-знак "="                 - "yes-yes"
-знак "^"                 - "^"
-знаки сравнения          - все такие же
-
-знак "if"                - "double_yummy"
-while                    - "tralalelo-tralala"
-
-сепаратор                - ""
 ===================================================================================================================
 ;                                          /***   RBNF grammar  ***\
 
-Grammar           :: = 'Breakfast:' {FunctionDef}+ 'end'
+Grammar           :: = 'Breakfast:' {FunctionDef | DeclareFunc | DeclareID}+ 'end'
 
-FunctionDef       :: = ID '(' Expression {'skip' Expression}* ')' Body
+FunctionDef       :: = ID '_' Number '_' Body
 
-Assignment        :: = ID 'yes-yes' Expression
+Assignment        :: = ID 'yes-yes' Expression | ID
 
 If                :: = Comparison { ['and' | 'or'] Comparison}* 'double-yummy' Body
-While             :: = 'golubino-shpioniro' Comparison Body
+While             :: = 'golubino-shpioniro' Comparison { ['and' | 'or'] Comparison}* Body
 
 Comparison        :: = Expression ['<'| '<=' | '!=' | '==' | '>=' | '>'] Expression
 
