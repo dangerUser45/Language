@@ -468,6 +468,9 @@ const char* GetOP (operations op_code)
         case EQUAL_COMPARE:
             return "==";
 
+        case NOT_EQUALE_COMPARE:
+            return "!=";
+
         case LESS:
             return "<";
 
@@ -488,6 +491,15 @@ const char* GetOP (operations op_code)
 
         case COMMENTS:
             return "|skip:";
+
+        case PARAM_ENVIRONMENT:
+            return "_";
+
+        case AND:
+            return "and";
+
+        case OR:
+            return "or";
 
         default:
             return 0;

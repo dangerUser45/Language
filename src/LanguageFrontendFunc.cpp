@@ -10,10 +10,8 @@ static ERRORS GetTokenNum (node* token_array, const char** string, size_t* token
 static const char* GetToken_Operator_or_ID (Language* language, const char* string, size_t* token_index, size_t* name_table_index);
 static int    Compare_KeyWords (const char* string, size_t length_word);
 
-static void   SyntaxError (SYNTAX_ERRORS error);
-
 static node* GetGrammar (Context_parser* context);
-static node* GetFunctionDef (Context_parser* context);
+static node* GetFunctionDefinition (Context_parser* context);
 
 static node* GetAssignment (Context_parser* context);
 
@@ -162,7 +160,8 @@ static int Compare_KeyWords (const char* string, size_t length_word)
         {"norm", SEPARATOR_IN_DECLARE_1, 4},
         {"cringe", SEPARATOR_IN_DECLARE_2, 6},
         {"and", AND, 3},
-        {"or", OR, 2}
+        {"or", OR, 2},
+        {"_", PARAM_ENVIRONMENT, 1}
     };
 
     size_t number_op = sizeof (KeyWords) / sizeof (Key_word);
@@ -174,12 +173,6 @@ static int Compare_KeyWords (const char* string, size_t length_word)
     return NOT_OP;
 
     #undef NOT_OP
-}
-//==================================================================
-void SyntaxError (SYNTAX_ERRORS error)
-{
-    fprintf (stderr, RED "SYNTAX ERROR: %s:%d: error = %d" RESET, __FILE__, __LINE__, error);
-    exit (1);
 }
 //==================================================================
 ERRORS Language_SyntaxAnalyser (Language* language)
@@ -209,15 +202,18 @@ node* GetGrammar (Context_parser* context) //NOTE
     {
         size_t old_pointer = context->pointer;
 
-        node_action = GetFunctionDef (context);
+        node_action = GetFunctionDefinition (context);
+        zz //FIXME
         if (node_action == NULL)
             context->pointer = old_pointer;
 
         node_action = GetDeclareFunction (context);
+        zz //FIXME
         if (node_action == NULL)
             context->pointer = old_pointer;
 
         node_action = GetDeclareID (context);
+        zz //FIXME
         if (node_action == NULL)
             context->pointer = old_pointer;
 
@@ -237,9 +233,10 @@ node* GetGrammar (Context_parser* context) //NOTE
     return node_filler_1;
 }
 //==================================================================
-node* GetFunctionDef (Context_parser* context) //NOTE
+node* GetFunctionDefinition (Context_parser* context) //NOTE
 {
-    node* token_array = context->token_array;
+    node* token_array  = context->token_array;
+    size_t old_pointer = context->pointer;
 
     node* nodeID = GetID (context);
     if (nodeID == NULL)
@@ -247,7 +244,10 @@ node* GetFunctionDef (Context_parser* context) //NOTE
 
     if (token_array[context->pointer].type     != OP              ||
     token_array[context->pointer].value.val_op != PARAM_ENVIRONMENT)
-        SYNTAX_ERROR (DBG_ERROR);
+    {
+        context->pointer = old_pointer;
+        return NULL;
+    }
     ++context->pointer;
 
     node* node_number = GetNumber (context);
@@ -266,21 +266,29 @@ node* GetFunctionDef (Context_parser* context) //NOTE
     nodeID->left  = node_number;
     nodeID->right = node_body;
 
+    ++context->pointer;
+
     return nodeID;
 }
 //==================================================================
 node* GetDeclareID (Context_parser* context) //NOTE
 {
-    node* token_array = context->token_array;
+    node* token_array  = context->token_array;
+    size_t old_pointer = context->pointer;
 
     node* node_ID = GetID (context);
     if (node_ID == NULL)
+    {
+        context->pointer = old_pointer;
         return NULL;
+    }
 
-    if (token_array[context->pointer].type != OP ||
-        token_array[context->pointer].value.val_op != SEPARATOR_IN_DECLARE_1 ||
-        token_array[context->pointer].value.val_op != SEPARATOR_IN_DECLARE_2  )
-        SYNTAX_ERROR (DBG_ERROR);
+    if (token_array[context->pointer].type         != OP                     ||
+       (token_array[context->pointer].value.val_op != SEPARATOR_IN_DECLARE_1 &&
+        token_array[context->pointer].value.val_op != SEPARATOR_IN_DECLARE_2 ))
+        { zz //FIXME
+        return 0;
+        }
 
     node* filler = CreateFillerNode ("DECLARE ID");
     filler->left = node_ID;
@@ -292,15 +300,22 @@ node* GetDeclareID (Context_parser* context) //NOTE
 //==================================================================
 node* GetDeclareFunction (Context_parser* context) //NOTE
 {
-    node* token_array = context->token_array;
+    node* token_array  = context->token_array;
+    size_t old_pointer = context->pointer;
 
     node* node_ID = GetID (context);
     if (node_ID == NULL)
+    {
+        context->pointer = old_pointer;
         return NULL;
+    }
 
     if (token_array[context->pointer].type         != OP              ||
         token_array[context->pointer].value.val_op != PARAM_ENVIRONMENT)
-        SYNTAX_ERROR (DBG_ERROR);
+    {
+        context->pointer = old_pointer;
+        return NULL;
+    }
     ++context->pointer;
 
     node* node_number = GetNumber (context);
@@ -310,8 +325,8 @@ node* GetDeclareFunction (Context_parser* context) //NOTE
         ++context->pointer;
 
     if (token_array[context->pointer].type != OP ||
-        token_array[context->pointer].value.val_op != SEPARATOR_IN_DECLARE_1 ||
-        token_array[context->pointer].value.val_op != SEPARATOR_IN_DECLARE_2  )
+       (token_array[context->pointer].value.val_op != SEPARATOR_IN_DECLARE_1 &&
+        token_array[context->pointer].value.val_op != SEPARATOR_IN_DECLARE_2 ))
         SYNTAX_ERROR (DBG_ERROR);
 
     ++context->pointer;
@@ -320,6 +335,8 @@ node* GetDeclareFunction (Context_parser* context) //NOTE
 
     filler_declare_func->left  = node_ID;
     filler_declare_func->right = node_number;
+
+    ++context->pointer;
 
     return filler_declare_func;
 }
@@ -354,16 +371,16 @@ node* GetCallFunction (Context_parser* context) //NOTE
         node_call_func = node_param;
     }
 
-    if (token_array[context->pointer].type != OP ||
-    token_array[context->pointer].value.val_op != CLOSING_BRACKET)
-    SYNTAX_ERROR (DBG_ERROR);
+    if (token_array[context->pointer].type     != OP            ||
+        token_array[context->pointer].value.val_op != CLOSING_BRACKET)
+        SYNTAX_ERROR (DBG_ERROR);
 
     ++context->pointer;
 
-    if (token_array[context->pointer].type != OP ||
-    token_array[context->pointer].value.val_op != SEPARATOR_IN_DECLARE_1 ||
-    token_array[context->pointer].value.val_op != SEPARATOR_IN_DECLARE_2  )
-    SYNTAX_ERROR (DBG_ERROR);
+    if (token_array[context->pointer].type         != OP                     ||
+       (token_array[context->pointer].value.val_op != SEPARATOR_IN_DECLARE_1 &&
+        token_array[context->pointer].value.val_op != SEPARATOR_IN_DECLARE_2 ))
+        SYNTAX_ERROR (DBG_ERROR);
 
     ++context->pointer;
 
@@ -419,6 +436,8 @@ node* GetBody (Context_parser* context) //NOTE
     } while (token_array[context->pointer].type         != OP ||
              token_array[context->pointer].value.val_op != CLOSING_CURLY_BRACKET);
 
+    ++context->pointer;
+
     return node_filler_1;
 }
 //==================================================================
@@ -440,11 +459,16 @@ node* GetComparison (Context_parser* context) //NOTE
     node_sym_comparison->left  = node_expression_1;
     node_sym_comparison->right = node_expression_2;
 
+    ++context->pointer;
+
     return node_sym_comparison;
 }
 //==================================================================
 bool GetSymComparison (operations op)
 {
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wswitch-enum"
+
     switch (op)
     {
         case EQUAL_COMPARE:
@@ -468,6 +492,8 @@ bool GetSymComparison (operations op)
         default:
             return false;
     }
+    #pragma GCC diagnostic pop
+
 
     return false;
 }
@@ -477,6 +503,9 @@ node* GetAssignment (Context_parser* context) //NOTE
     node* token_array = context->token_array;
 
     node* node_ID = GetID (context);
+    if (node_ID == NULL)
+        SYNTAX_ERROR (DBG_ERROR);
+
 
     if (token_array[context->pointer].type != OP ||
     token_array[context->pointer].value.val_op != EQUALS)
@@ -485,20 +514,15 @@ node* GetAssignment (Context_parser* context) //NOTE
     node* node_equals = &token_array[context->pointer];
     ++context->pointer;
 
-    size_t old_pointer = context->pointer;
-    node* node_2 = GetExpression (context);
+    node* node_expr = GetExpression (context);
 
-    if (node_2 == NULL)
-    {
-        context->pointer = old_pointer;
-
-        node_2 = GetID (context);
-        if (node_2 == NULL)
-            SYNTAX_ERROR (DBG_ERROR);
-    }
+    if (node_expr == NULL)
+        SYNTAX_ERROR (DBG_ERROR);
 
     node_equals->left  = node_ID;
-    node_equals->right = node_2;
+    node_equals->right = node_expr;
+
+    ++context->pointer;
 
     return node_equals;
 }
@@ -534,6 +558,8 @@ node* GetIf (Context_parser* context) //NOTE
     node_if->left  = node_comparison_1;
     node_if->right = node_body;
 
+    ++context->pointer;
+
     return node_if;
 }
 //==================================================================
@@ -567,6 +593,8 @@ node* GetWhile (Context_parser* context) //NOTE
 
     node_while->left  = node_comparison_1;
     node_while->right = node_body;
+
+    ++context->pointer;
 
     return node_while;
 }

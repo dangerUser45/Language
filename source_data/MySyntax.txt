@@ -1,53 +1,51 @@
-===================================================================================================================
+-*- ===================================================================================================================
 ;                                          /***   RBNF grammar  ***\
 
-Grammar           :: = 'Breakfast:' {FunctionDef | DeclareFunc | DeclareID}+ 'end'
+Grammar            :: = 'Breakfast:' {FunctionDefinition | DeclareFunction | DeclareID}+ 'end'
 
-FunctionDef       :: = ID '_' Number '_' Body
+FunctionDefinition :: = ID '_' Number '_' Body
 
-Assignment        :: = ID 'yes-yes' Expression | ID
+Assignment         :: = ID 'yes-yes' Expression | ID
 
-If                :: = Comparison { ['and' | 'or'] Comparison}* 'double-yummy' Body
-While             :: = 'golubino-shpioniro' Comparison { ['and' | 'or'] Comparison}* Body
+If                 :: = Comparison { ['and' | 'or'] Comparison}* 'double-yummy' Body
+While              :: = 'golubino-shpioniro' Comparison { ['and' | 'or'] Comparison}* Body
 
-Comparison        :: = Expression ['<'| '<=' | '!=' | '==' | '>=' | '>'] Expression
+Comparison         :: = Expression ['<'| '<=' | '!=' | '==' | '>=' | '>'] Expression
 
-Body              :: = 'want-millpops' { CallFunction | If | While| Assignment | DeclareID }+ 'dirty'
+Body               :: = 'want-millpops' { CallFunction | If | While| Assignment | DeclareID }+ 'dirty'
 
-CallFunction      :: = ID '(' {Expression skip}* ')' 'norm' | 'skip'
-DeclareFunction   :: = ID '_' Number '_' ['norm' | 'cringe']
-DeclareID         :: = ID ['norm' | 'cringe']
+CallFunction       :: = ID '(' {Expression skip}* ')' 'norm' | 'skip'
+DeclareFunction    :: = ID '_' Number '_' ['norm' | 'cringe']
+DeclareID          :: = ID ['norm' | 'cringe']
 
-Expression        :: = Term { ['+vibe','-vibe'] Term}*
-Term              :: = Pow {['*', '/'] Pow }*
-Pow               :: = PrimaryExpression {[ '^' ] PrimaryExpression}*
-PrimaryExpression :: = BracketExpression  | ID | Number
-BracketExpression :: = '(' Expression ')'
-Number            :: = ['0' - '9']+
-ID                :: = ['a' - 'Z' | '_' | '+' | '-' |'0' - '9']+
-
+Expression         :: = Term { ['+vibe','-vibe'] Term}*
+Term               :: = Pow {['*', '/'] Pow }*
+Pow                :: = PrimaryExpression {[ '^' ] PrimaryExpression}*
+PrimaryExpression  :: = BracketExpression  | ID | Number
+BracketExpression  :: = '(' Expression ')'
+Number             :: = ['0' - '9']+
+ID                 :: = ['a' - 'Z' | '_' | '+' | '-' |'0' - '9']+
 --------------------------------------------------------------------------------------------------------------------
 -*-
 Breakfast:
 
-    MyDefaultBreakfast ()
+    damir cringe
+    MyDefaultBreakfast _ 0 _ norm
+    Factorial _ 1 _ cringe
+
+    MyDefaultBreakfast _ 0 _
     want-millpops
         danek norm
         damir cringe
-        Factorial _1_ cringe
 
         x norm x yes-yes 5
-        x < 5 double-yummy
+        x == 5 double-yummy
         want-millpops
-            Factorial (x skip)
+            Factorial ( x skip ) norm
         dirty
 
     dirty
 
-    Factorial ()
-    want-millpops
-
-    dirty
 end
 
 -*-
