@@ -1,1 +1,22 @@
-( x * 5 +vibe ( y -vibe 8 ) * ( 7 -vibe 9 ) ) -vibe 18
+Breakfast:
+
+    MyDefaultBreakfast ()
+    want-millpops
+        danek norm
+        damir cringe
+        Factorial _1_ cringe
+
+        x norm x yes-yes 5
+        x == 5 double-yummy
+        want-millpops
+            Factorial (x skip)
+        dirty
+
+    dirty
+
+    Factorial ()
+    want-millpops
+
+    dirty
+
+end

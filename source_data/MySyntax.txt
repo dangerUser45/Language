@@ -1,0 +1,104 @@
+New language:
+
+начало проги             - "Breakfast:"
+конец                    - "end"
+открывающаяся скобка "{" - "want_millpops"
+открывающаяся скобка "}" - "dirty"
+
+Объявл переменной        - "bombardiro-krokodilo"
+объявление функции       - "is_the_base"
+
+знак "+"                 - "+vibe"
+знак "-"                 - "-vibe"
+знак "/"                 - "/"
+знак "*"                 - "*"
+знак "="                 - "yes-yes"
+знак "^"                 - "^"
+знаки сравнения          - все такие же
+
+знак "if"                - "double_yummy"
+while                    - "tralalelo-tralala"
+
+сепаратор                - ""
+===================================================================================================================
+;                                          /***   RBNF grammar  ***\
+
+Grammar           :: = 'Breakfast:' {FunctionDef}+ 'end'
+
+FunctionDef       :: = ID '(' Expression {'skip' Expression}* ')' Body
+
+Assignment        :: = ID 'yes-yes' Expression
+
+If                :: = Comparison { ['and' | 'or'] Comparison}* 'double-yummy' Body
+While             :: = 'golubino-shpioniro' Comparison Body
+
+Comparison        :: = Expression ['<'| '<=' | '!=' | '==' | '>=' | '>'] Expression
+
+Body              :: = 'want-millpops' { CallFunction | If | While| Assignment | DeclareID }+ 'dirty'
+
+CallFunction      :: = ID '(' {Expression skip}* ')' 'norm' | 'skip'
+DeclareFunction   :: = ID '_' Number '_' ['norm' | 'cringe']
+DeclareID         :: = ID ['norm' | 'cringe']
+
+Expression        :: = Term { ['+vibe','-vibe'] Term}*
+Term              :: = Pow {['*', '/'] Pow }*
+Pow               :: = PrimaryExpression {[ '^' ] PrimaryExpression}*
+PrimaryExpression :: = BracketExpression  | ID | Number
+BracketExpression :: = '(' Expression ')'
+Number            :: = ['0' - '9']+
+ID                :: = ['a' - 'Z' | '_' | '+' | '-' |'0' - '9']+
+
+--------------------------------------------------------------------------------------------------------------------
+-*-
+Breakfast:
+
+    MyDefaultBreakfast ()
+    want-millpops
+        danek norm
+        damir cringe
+        Factorial _1_ cringe
+
+        x norm x yes-yes 5
+        x < 5 double-yummy
+        want-millpops
+            Factorial (x skip)
+        dirty
+
+    dirty
+
+    Factorial ()
+    want-millpops
+
+    dirty
+end
+
+-*-
+//-----------------------------------
+double factorial_recursive (double n)
+{
+    if (n == 0.0 || n == 1.0)
+        return 1.0;
+
+    return n * factorial (n - 1.0)
+}
+//-----------------------------------
+double factorial_cycle (double n)
+{
+    if (n == 0.0 || n == 1.0)
+        return 1.0;
+
+    double i;
+    double i = 1.0;
+
+    double sum;
+    double sum = 1.0;
+
+    while (x < n)
+    {
+        sum = sum * (sum + 1.0);
+        x++;
+    }
+
+    return sum
+}
+//-----------------------------------

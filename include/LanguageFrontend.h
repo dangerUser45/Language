@@ -56,6 +56,9 @@ enum operations
     END_PARAM_FUNC          = 31,
 
     COMMENTS                = 32,
+    PARAM_ENVIRONMENT       = 33,
+    AND                     = 34,
+    OR                      = 35,
 };
 
 union VALUE
