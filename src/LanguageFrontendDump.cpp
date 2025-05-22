@@ -20,6 +20,7 @@ void CreateFrontendDotContext (Language* language);
 static const char* GetColor (type_t type);
 static const char* GetTypeNode (type_t type);
 static const char* GetOP (operations op_code);
+static const char* GetNameTableID (type_id type_id);
 
 static ERRORS ConsoleCommandCallDot (PRINT_OBJ object);
 static ERRORS PrintHtmlFrontendIntro ();
@@ -184,10 +185,10 @@ void PrintNameTable (Language* language)
                 fprintf (language_graphviz_file, ""
             "subgraph cluster_%zu\n\t\t"
             "{\n\t\t\t"
-                "elem_%zu[label = \"addr = %p | ID = \\\"%s\\\" \"];\n\t\t\t"
+                "elem_%zu[label = \"addr = %p | ID = \\\"%s\\\" | type = %s \"];\n\t\t\t"
                 "label = \"%zu\";\n\t\t\t"
                 "fontsize = 16\n\t\t"
-            "}\n\n\t\t", i, i, &language->name_table[i], language->name_table[i].name_id, i);
+            "}\n\n\t\t", i, i, &language->name_table[i], language->name_table[i].name_id, GetNameTableID (language->name_table[i].type), i);
 
             for (size_t i = 0; i < name_table_number - 1; ++i)
                 fprintf (language_graphviz_file, ""
@@ -498,6 +499,27 @@ const char* GetOP (operations op_code)
     }
 
     return 0;
+}
+//==================================================================================================
+const char* GetNameTableID (type_id type_id)
+{
+    switch (type_id)
+    {
+        case GLOBAL:
+            return "GLOBAL";
+
+        case LOCAL:
+            return "LOCAL";
+
+        case FUNCTION:
+            return "FUNCTION";
+
+        case PARAM:
+            return "PARAM";
+
+        default:
+            return 0;
+    }
 }
 //==================================================================================================
 ERRORS ConsoleCommandCallDot (PRINT_OBJ object)

@@ -9,7 +9,7 @@
 
 static ERRORS GetTokenNum (node* token_array, const char** string, size_t* token_index);
 static const char* GetToken_Operator_or_ID (Language* language, const char* string, size_t* token_index, size_t* name_table_index);
-static int    Compare_KeyWords (const char* string, size_t length_word);
+static int   Compare_KeyWords (const char* string, size_t length_word);
 
 static node* GetGrammar (Context_parser* context);
 static node* GetFunctionDefinition (Context_parser* context);
@@ -26,7 +26,7 @@ static node* GetBody (Context_parser* context, body_type body_type);
 
 static node* GetCallFunction (Context_parser* context);
 static node* GetDeclareFunction (Context_parser* context);
-static node* GetDeclareID (Context_parser* context);
+static node* GetDeclareID (Context_parser* context, type_id type_id);
 
 static node* GetExpression (Context_parser* context);
 static node* GetTerm (Context_parser* context);
@@ -37,6 +37,8 @@ static node* GetNumber (Context_parser* context);
 static node* GetID (Context_parser* context);
 
 static node* CreateFillerNode (const char* text);
+static void  GetSetID (Context_parser* context, type_id type_id);
+static bool  CompareIDtype (Context_parser* context);
 
 //==================================================================
 #define SYNTAX_ERROR(error, context)\
@@ -174,7 +176,10 @@ static int Compare_KeyWords (const char* string, size_t length_word)
 //==================================================================
 ERRORS Language_SyntaxAnalyser (Language* language)
 {
-    Context_parser context = {.language = language, .token_array = language->token_array, .pointer = 0};
+    Context_parser context = {.language = language,
+                              .token_array = language->token_array,
+                              .name_table = language->name_table,
+                              .pointer = 0};
 
     node* node = GetGrammar (&context);
     z(node, p)
@@ -205,7 +210,7 @@ node* GetGrammar (Context_parser* context) //NOTE
         if (!node_action) node_action = GetDeclareFunction (context);
         if (!node_action) context->pointer = old_pointer;
 
-        if (!node_action) node_action = GetDeclareID (context);
+        if (!node_action) node_action = GetDeclareID (context, GLOBAL);
         if (!node_action) context->pointer = old_pointer;
 
         if (!node_action) node_action = GetFunctionDefinition (context);
@@ -235,6 +240,7 @@ node* GetFunctionDefinition (Context_parser* context) //NOTE
     node* nodeID = GetID (context);
     if (nodeID == NULL)
         return NULL;
+    GetSetID (context, FUNCTION);
 
     if (token_array[context->pointer].type     != OP              ||
     token_array[context->pointer].value.val_op != PARAM_ENVIRONMENT)
@@ -255,6 +261,7 @@ node* GetFunctionDefinition (Context_parser* context) //NOTE
 
         node* node = GetID (context);
         if (!node) SYNTAX_ERROR (DBG_ERROR, context);
+        GetSetID (context, PARAM);
 
         if (token_array[context->pointer].type     != OP            ||
         token_array[context->pointer].value.val_op != SEPARATOR_PARAM)
@@ -277,7 +284,7 @@ node* GetFunctionDefinition (Context_parser* context) //NOTE
     return node_filler_fn_def;
 }
 //==================================================================
-node* GetDeclareID (Context_parser* context)
+node* GetDeclareID (Context_parser* context, type_id type_id)
 {
     node* token_array  = context->token_array;
     size_t old_pointer = context->pointer;
@@ -288,6 +295,8 @@ node* GetDeclareID (Context_parser* context)
         context->pointer = old_pointer;
         return NULL;
     }
+
+    GetSetID (context, type_id);
 
     if (token_array[context->pointer].type         != OP                     ||
        (token_array[context->pointer].value.val_op != SEPARATOR_IN_DECLARE_1 &&
@@ -309,6 +318,8 @@ node* GetDeclareFunction (Context_parser* context)
     node* node_ID = GetID (context);
     if (node_ID == NULL)
         return NULL;
+
+    GetSetID (context, FUNCTION);
 
     if (token_array[context->pointer].type         != OP              ||
         token_array[context->pointer].value.val_op != PARAM_ENVIRONMENT)
@@ -349,6 +360,8 @@ node* GetCallFunction (Context_parser* context)
     node* node_ID = GetID (context);
     if (node_ID == NULL)
         return NULL;
+    GetSetID (context, FUNCTION);
+
 
     node_call_func->left  = node_ID;
 
@@ -419,7 +432,7 @@ node* GetBody (Context_parser* context, body_type body_type)
         if (!node_op) node_op = GetCallFunction (context);
         if (!node_op) context->pointer = old_pointer;
 
-        if (!node_op) node_op = GetDeclareID (context);
+        if (!node_op) node_op = GetDeclareID (context, LOCAL);
         if (!node_op) context->pointer = old_pointer;
 
         if (!node_op) node_op =  GetWhile (context);
@@ -532,12 +545,11 @@ node* GetAssignment (Context_parser* context)
     node* node_ID = GetID (context);
     if (node_ID == NULL)
         return NULL;
-    zz
+    GetSetID (context, LOCAL);
 
     if (token_array[context->pointer].type     != OP   ||
     token_array[context->pointer].value.val_op != EQUALS)
         return NULL;
-    zz
 
     node* node_equals = &token_array[context->pointer];
     ++context->pointer;
@@ -676,7 +688,10 @@ node* GetPrimaryExpression (Context_parser* context)
 
     else node_val = GetID (context);
         if (node_val)
+        {
+            GetSetID (context, LOCAL);
             return node_val;
+        }
         else
           return GetNumber(context);
 }
@@ -702,11 +717,47 @@ node* GetBracketEx (Context_parser* context)
 //==================================================================
 node* GetID (Context_parser* context)
 {
-    if (context -> token_array[context -> pointer].type == ID) {
+    if (context->token_array[context->pointer].type == ID)
+    {
         context -> pointer++;
-        return context -> token_array + context -> pointer - 1;}
+        return context -> token_array + context -> pointer - 1;
+    }
 
     else return 0;
+}
+//==================================================================
+void GetSetID (Context_parser* context, type_id type_id)
+{
+    if (context -> token_array[context -> pointer - 1].type != ID)
+        SYNTAX_ERROR (DBG_ERROR, context);
+
+    if ((type_id == LOCAL) && (CompareIDtype (context) == true))
+    {
+        context->name_table[context->token_array[context->pointer - 1].value.id].type = PARAM;
+        return;
+    }
+
+    context->name_table[context->token_array[context->pointer - 1].value.id].type = type_id;
+}
+//==================================================================
+bool CompareIDtype (Context_parser* context)
+{
+    NAME_TABLE* name_table = context->name_table;
+    size_t name_table_number = context->language->name_table_number;
+    size_t pointer = context->token_array[context->pointer - 1].value.id;
+
+    for (size_t i = 0; i < name_table_number; ++i)
+    {
+        if (name_table[i].type == PARAM)
+        {   z(name_table[pointer].name_id, s); z(name_table[i].name_id, s);
+            if (!strcmp (name_table[pointer].name_id, name_table[i].name_id))
+            { zz
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 //==================================================================
 // node* GetMathFunc (node* token_array)
@@ -750,7 +801,7 @@ node* GetID (Context_parser* context)
 //
 //     else return 0;
 // }
-//==================================================================*/
+//==================================================================
 node* GetNumber (Context_parser* context)
 {
     node* node = 0;

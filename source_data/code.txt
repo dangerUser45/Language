@@ -3,11 +3,15 @@ Breakfast:
 damir cringe
 yura norm
 
+var norm
+
 Yura _ 4 _ norm
 
 Yura _ n skip  _
 want-millpops
+    x cringe
     n yes-yes 5
+    var norm
 dirty
 
 DIYA-kontora...

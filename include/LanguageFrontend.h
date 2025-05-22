@@ -12,8 +12,9 @@ inline const char* NAME_LANGUAGE_LOG_FILE = "dump/Frontend_log.html";
 inline const char* NAME_LANGUAGE_GRAPHVIZ_FILE = "dump/Graphviz_dot/Frontend_graphviz.txt";
 
 typedef double val_t;
+
 enum type_t {NUM = 1, ID, OP, FILLER};
-enum type_variable {GLOBAL = 1, LOCAL, FUNCTION};
+enum type_id {GLOBAL = 1, LOCAL, FUNCTION, PARAM};
 enum body_type {FUNC = 1, NO_FUNC};
 
 const int MAX_NAME_ID = 256;
@@ -76,7 +77,7 @@ struct node
 struct NAME_TABLE
 {
     char name_id [MAX_NAME_ID];
-    type_variable type;
+    type_id type;
 };
 
 struct Language
@@ -104,6 +105,7 @@ struct Context_parser
 {
     Language* language;
     node* token_array;
+    NAME_TABLE* name_table;
     size_t pointer;
 };
 
