@@ -6,10 +6,12 @@ const int NUM_ARG = 2;
 const int MAX_NUM_ID = 4096;
 const int NUM_OF_TOKEN = 4096;
 
+
 const int MAX_LENGTH_OP = 256;
 
 inline const char* NAME_LANGUAGE_LOG_FILE = "dump/Frontend_log.html";
 inline const char* NAME_LANGUAGE_GRAPHVIZ_FILE = "dump/Graphviz_dot/Frontend_graphviz.txt";
+inline const char* NAME_OUTPUT_FRONTEND_FILE = "output/Output.txt";
 
 typedef double val_t;
 
@@ -125,5 +127,7 @@ Language* LanguageCtor (int argc, char** argv);
 
 ERRORS Language_LexicalAnalyser (Language* language);
 ERRORS Language_SyntaxAnalyser  (Language* language);
+
+ERRORS LanguageWriteAST (Language* language);
 
 ERRORS LanguageDtor (Language* language);

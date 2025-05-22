@@ -118,15 +118,13 @@ void LanguageGraphDump (Language* language)
 
     if (language->parent_node != NULL )
     {
-        z(language->parent_node, p)
         language_graphviz_file = freopen (NAME_LANGUAGE_GRAPHVIZ_FILE, "w", language_graphviz_file);
         setvbuf      (language_log_file, NULL, _IONBF, 0);  // Отключение буферизации
         setvbuf (language_graphviz_file, NULL, _IONBF, 0);  // Отключение буферизации
 
-        zz
-        PrintAST_Tree (language); zz
-        ConsoleCommandCallDot (TREE); zz
-        LanguageAddImages (TREE); zz
+        PrintAST_Tree (language);
+        ConsoleCommandCallDot (TREE);
+        LanguageAddImages (TREE);
     }
 }
 //==================================================================================================

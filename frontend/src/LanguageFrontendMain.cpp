@@ -16,6 +16,8 @@ int main (int argc, char** argv)
     Language_SyntaxAnalyser  (language);
     LanguageGraphDump (language);
 
+    LanguageWriteAST (language);
+
     LanguageDtor (language);
     fprintf (stderr, ORANGE "OK %s:%d\n" RESET, __FILE__, __LINE__);
 }

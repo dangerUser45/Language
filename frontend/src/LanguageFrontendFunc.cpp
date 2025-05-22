@@ -40,6 +40,15 @@ static node* CreateFillerNode (const char* text);
 static void  GetSetID (Context_parser* context, type_id type_id);
 static bool  CompareIDtype (Context_parser* context);
 
+static ERRORS ParsingAST (Language* language, FILE* file_ptr);
+static const char* InsertTab (char* buffer, size_t counter);
+static void WriteOneList(Language* language, node* node, FILE* file_ptr, char* buffer, size_t tab_counter);
+
+static const char* WriteTypeNode (type_t type);
+static const char* WriteValue (Language* language, node* node);
+static const char* WriteOP (operations op_code);
+static const char* WriteNameTableID (type_id type_id);
+
 //==================================================================
 #define SYNTAX_ERROR(error, context)\
 {\
@@ -103,7 +112,6 @@ const char* GetToken_Operator_or_ID (Language* language, const char* string, siz
     else
     {
         int op = Compare_KeyWords (start, length_word);
-        z(op, d)
 
         if (op != 0)
         {
@@ -182,7 +190,6 @@ ERRORS Language_SyntaxAnalyser (Language* language)
                               .pointer = 0};
 
     node* node = GetGrammar (&context);
-    z(node, p)
     language->parent_node = node;
 
     return NO_ERRORS;
@@ -235,7 +242,6 @@ node* GetGrammar (Context_parser* context) //NOTE
 node* GetFunctionDefinition (Context_parser* context) //NOTE
 {
     node* token_array  = context->token_array;
-    size_t old_pointer = context->pointer;
 
     node* nodeID = GetID (context);
     if (nodeID == NULL)
@@ -440,8 +446,6 @@ node* GetBody (Context_parser* context, body_type body_type)
 
         if (!node_op) node_op = GetIf (context);
         if (!node_op) context->pointer = old_pointer;
-
-        z(context->pointer, zu) z(old_pointer, zu)
 
         if (context->pointer == old_pointer)
             SYNTAX_ERROR (DBG_ERROR, context);
@@ -677,7 +681,7 @@ node* GetPow  (Context_parser* context)
         }
     }
 
-      return node_val1;
+    return node_val1;
 }
 //==================================================================
 node* GetPrimaryExpression (Context_parser* context)
@@ -749,12 +753,8 @@ bool CompareIDtype (Context_parser* context)
     for (size_t i = 0; i < name_table_number; ++i)
     {
         if (name_table[i].type == PARAM)
-        {   z(name_table[pointer].name_id, s); z(name_table[i].name_id, s);
             if (!strcmp (name_table[pointer].name_id, name_table[i].name_id))
-            { zz
                 return true;
-            }
-        }
     }
 
     return false;
@@ -825,3 +825,262 @@ node* CreateFillerNode (const char* text)
     return Node;
 }
 //==================================================================
+ERRORS LanguageWriteAST (Language* language)
+{
+    FILE* file_ptr = OpenFile (NAME_OUTPUT_FRONTEND_FILE, "w");
+
+    ParsingAST (language, file_ptr);
+
+    CloseFile (file_ptr);
+    return NO_ERRORS;
+}
+//==================================================================
+ERRORS ParsingAST (Language* language, FILE* file_ptr)
+{
+    size_t token_number = language->token_number;
+    node* node = language->parent_node;
+
+    DBG(setvbuf (file_ptr, NULL, _IONBF, 0);)  // Отключение буферизации
+    size_t counter = 0;
+
+    char* buffer = (char*) calloc (1024, sizeof (char));
+
+    WriteOneList (language, node, file_ptr, buffer, counter);
+
+    free (buffer);
+
+    return NO_ERRORS;
+}
+//==================================================================
+void WriteOneList(Language* language, node* node, FILE* file_ptr, char* buffer, size_t tab_counter)
+{
+    if (node == NULL)
+        return;
+
+    if (node->type == FILLER || node->type == OP)
+    {
+        fprintf(file_ptr, "%s{%s:\"%s\"\n",
+            InsertTab(buffer, tab_counter),
+            WriteTypeNode(node->type),
+            WriteValue(language, node));
+    }
+
+    else if (node->type == ID)
+    {
+        fprintf(file_ptr, "%s{%s:%s:\"%s\"}\n",
+            InsertTab(buffer, tab_counter),
+            WriteTypeNode(node->type),
+            WriteNameTableID(language->name_table[node->value.id].type),
+            WriteValue(language, node));
+        return;
+    }
+
+    else
+    {
+        fprintf(file_ptr, "%s{%s:\"%s\"}\n",
+            InsertTab(buffer, tab_counter),
+            WriteTypeNode(node->type),
+            WriteValue(language, node));
+        return;
+    }
+
+    WriteOneList(language, node->left, file_ptr, buffer, tab_counter + 1);
+    WriteOneList(language, node->right, file_ptr, buffer, tab_counter + 1);
+
+    fprintf(file_ptr, "%s}\n", InsertTab(buffer, tab_counter));
+}
+//==================================================================
+const char* InsertTab (char* buffer, size_t counter)
+{
+    memset (buffer, '\0', 1024);
+    for (size_t i = 0; i < counter; ++i)
+        snprintf (buffer + i, 2, "\t");
+
+    return buffer;
+}
+//==================================================================
+const char* WriteTypeNode (type_t type)
+{
+    switch (type)
+    {
+        case NUM:
+            return "NUM";
+
+        case ID:
+            return "ID";
+
+        case OP:
+            return "OP";
+
+        case FILLER:
+            return "FILLER";
+
+        default:
+            fprintf (stderr, RED "ERROR in %s:%d: type is undefined" RESET "\n", __FILE__, __LINE__);
+    }
+
+    return 0;
+}
+//==================================================================================================
+const char* WriteValue (Language* language, node* node)
+{
+    char* buffer = (char*) calloc (512, sizeof (char));
+
+    type_t type = node->type;
+    switch (type)
+    {
+        case NUM:
+        {
+            sprintf (buffer, "%lf", node->value.val_num);
+            return buffer;
+        }
+
+        case ID:
+        {
+            sprintf (buffer, "%s", language->name_table[node->value.id].name_id);
+            return buffer;
+        }
+
+        case OP:
+        {
+            sprintf (buffer, "%s", WriteOP (node->value.val_op));
+            return buffer;
+        }
+
+        case FILLER:
+        {
+            sprintf (buffer, "%s", node->value.filler);
+            return buffer;
+        }
+
+        default:
+            fprintf (stderr, RED "ERROR in %s:%d: type is undefined" RESET "\n", __FILE__, __LINE__);
+    }
+
+    free (buffer);
+
+    return 0;
+}
+//==================================================================================================
+const char* WriteOP (operations op_code)
+{
+    switch (op_code)
+    {
+        case BEGINING:
+            return "Breakfast";
+
+        case OPENING_CURLY_BRACKET:
+            return "want-millpops";
+
+        case CLOSING_CURLY_BRACKET:
+            return "dirty";
+
+        case OPENING_BRACKET:
+            return "(";
+
+        case CLOSING_BRACKET:
+            return ")";
+
+        case DECLARATION_ID:
+            return "bombardiro-krokodilo";
+
+        case EQUALS:
+            return "yes-yes";
+
+        case DECLARATION_FUNCTION:
+            return "is-the-base";
+
+        case IF:
+            return "double-yummy";
+
+        case WHILE:
+            return "golubino-shpioniro";
+
+        case SIN:
+            return "sin";
+
+        case COS:
+            return "cos";
+
+        case ENDING:
+            return "DIYA-kontora...";
+
+        case ADDITTION:
+            return "+vibe";
+
+        case SUBTRACTION:
+            return "-vibe";
+
+        case DIVISION:
+            return "/";
+
+        case MULTIPLICATION:
+            return "*";
+
+        case ELEVATION:
+            return "^";
+
+        case SEPARATOR_PARAM:
+            return "skip";
+
+        case SEPARATOR_IN_DECLARE_1:
+            return "norm";
+
+        case SEPARATOR_IN_DECLARE_2:
+            return "cringe";
+
+        case EQUAL_COMPARE:
+            return "==";
+
+        case NOT_EQUALE_COMPARE:
+            return "!=";
+
+        case LESS:
+            return "<";
+
+        case LESS_OR_EQUALE:
+            return "<=";
+
+        case MORE:
+            return ">";
+
+        case MORE_OR_EQUAL:
+            return ">=";
+
+        case COMMENTS:
+            return "|skip:";
+
+        case PARAM_ENVIRONMENT:
+            return "_";
+
+        case RETURN:
+            return "tralalelo-tralala";
+
+        default:
+            return 0;
+    }
+
+    return 0;
+}
+//==================================================================================================
+const char* WriteNameTableID (type_id type_id)
+{
+    switch (type_id)
+    {
+        case GLOBAL:
+            return "GLOBAL";
+
+        case LOCAL:
+            return "LOCAL";
+
+        case FUNCTION:
+            return "FUNCTION";
+
+        case PARAM:
+            return "PARAM";
+
+        default:
+            return 0;
+    }
+}
+//==================================================================================================
