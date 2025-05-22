@@ -1,0 +1,20 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-I./include",
+      "-I./../libs/common/include/",
+      "-mavx",
+      "-mavx2",
+      "-O3",
+      "-DNDEBUG",
+      "-c",
+      "-o",
+      "build/Common.o",
+      "src/Common.cpp"
+    ],
+    "directory": "/home/danek/Projects/Language/backend/",
+    "file": "/home/danek/Projects/Language/backend/src/LanguageBackendMain.cpp",
+    "output": "/home/danek/Projects/Language/backend/build/LanguageBackend.out"
+  }
+]

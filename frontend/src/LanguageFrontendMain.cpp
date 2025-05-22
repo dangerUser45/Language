@@ -12,6 +12,7 @@ int main (int argc, char** argv)
     Language* language = LanguageCtor (argc, argv);
 
     Language_LexicalAnalyser (language);
+    LanguageGraphDump (language);
 
     Language_SyntaxAnalyser  (language);
     LanguageGraphDump (language);

@@ -12,8 +12,9 @@ While              :: = 'golubino-shpioniro' Comparison  Body
 
 Comparison         :: = CallFunction | Expression ['<'| '<=' | '!=' | '==' | '>=' | '>']  CallFunction | Expression
 
-Body               :: = 'want-millpops' { CallFunction | If | While| Assignment | DeclareID }+ 'dirty'
+Body               :: = 'want-millpops' { CallFunction | If | While| Assignment | DeclareID }+ \\Если тело функции то Return\\ 'dirty'
 
+Return             :: = 'tralalelo-tralala' CallFunction | Expression
 CallFunction       :: = ID '(' {Expression | CallFunction skip}* ')' 'norm' | 'cringe'
 DeclareFunction    :: = ID '_' Number '_' ['norm' | 'cringe']
 DeclareID          :: = ID ['norm' | 'cringe']
@@ -69,10 +70,10 @@ double factorial_cycle (double n)
     double sum;
     double sum = 1.0;
 
-    while (x < n)
+    while (i < n)
     {
         sum = sum * (sum + 1.0);
-        x++;
+        i++;
     }
 
     return sum

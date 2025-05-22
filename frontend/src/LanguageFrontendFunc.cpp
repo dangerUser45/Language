@@ -35,6 +35,7 @@ static node* GetPrimaryExpression (Context_parser* context);
 static node* GetBracketEx (Context_parser* context);
 static node* GetNumber (Context_parser* context);
 static node* GetID (Context_parser* context);
+static node* GetReturn (Context_parser* context);
 
 static node* CreateFillerNode (const char* text);
 static void  GetSetID (Context_parser* context, type_id type_id);
@@ -216,12 +217,16 @@ node* GetGrammar (Context_parser* context) //NOTE
 
         if (!node_action) node_action = GetDeclareFunction (context);
         if (!node_action) context->pointer = old_pointer;
+        z(&token_array[context->pointer], p) //FIXME
+
 
         if (!node_action) node_action = GetDeclareID (context, GLOBAL);
         if (!node_action) context->pointer = old_pointer;
+        z(&token_array[context->pointer], p) //FIXME
 
         if (!node_action) node_action = GetFunctionDefinition (context);
         if (!node_action) context->pointer = old_pointer;
+        z(&token_array[context->pointer], p) //FIXME
 
         if (context->pointer == old_pointer)
             SYNTAX_ERROR (DBG_ERROR, context)
@@ -280,6 +285,7 @@ node* GetFunctionDefinition (Context_parser* context) //NOTE
         node_func = node_param;
     }
     ++context->pointer;
+    z(&token_array[context->pointer], p) //FIXME
 
     node* node_body = GetBody (context, FUNC);
     if (node_body == NULL)
@@ -417,6 +423,7 @@ node* GetCallFunction (Context_parser* context)
 node* GetBody (Context_parser* context, body_type body_type)
 {
     node* token_array = context->token_array;
+    z(&token_array[context->pointer], p) //FIXME
 
     if (token_array[context->pointer].type != OP ||
         token_array[context->pointer].value.val_op != OPENING_CURLY_BRACKET)
@@ -434,18 +441,27 @@ node* GetBody (Context_parser* context, body_type body_type)
 
         if (!node_op) node_op = GetAssignment (context);
         if (!node_op) context->pointer = old_pointer;
+        z(&token_array[context->pointer], p) //FIXME
 
         if (!node_op) node_op = GetCallFunction (context);
         if (!node_op) context->pointer = old_pointer;
+        z(&token_array[context->pointer], p) //FIXME
 
         if (!node_op) node_op = GetDeclareID (context, LOCAL);
         if (!node_op) context->pointer = old_pointer;
+        z(&token_array[context->pointer], p) //FIXME
 
         if (!node_op) node_op =  GetWhile (context);
         if (!node_op) context->pointer = old_pointer;
+        z(&token_array[context->pointer], p) //FIXME
 
         if (!node_op) node_op = GetIf (context);
         if (!node_op) context->pointer = old_pointer;
+        z(&token_array[context->pointer], p) //FIXME
+
+        if (!node_op) node_op = GetReturn (context);
+        if (!node_op) context->pointer = old_pointer;
+        z(&token_array[context->pointer], p) //FIXME
 
         if (context->pointer == old_pointer)
             SYNTAX_ERROR (DBG_ERROR, context);
@@ -461,14 +477,34 @@ node* GetBody (Context_parser* context, body_type body_type)
     } while (token_array[context->pointer].type         != OP                  ||
              token_array[context->pointer].value.val_op != CLOSING_CURLY_BRACKET);
 
-    if (body_type == FUNC)
-        node_filler_prelast->right = CreateFillerNode ("RET");
-
-    else
         node_filler_prelast->right = NULL;
 
     ++context->pointer;
-    return node_filler_1_copy;
+    return node_filler_1_copy;}
+//==================================================================
+node* GetReturn (Context_parser* context)
+{
+    node* token_array = context->token_array;
+
+    if (token_array[context->pointer].type         != OP   ||
+        token_array[context->pointer].value.val_op != RETURN)
+        return NULL;
+
+    node* node_ret = &token_array[context->pointer];
+    ++context->pointer;
+
+    node* node_op = 0;
+    size_t old_pointer = context->pointer;
+
+    if (!node_op) node_op = GetCallFunction (context);
+    if (!node_op) context->pointer = old_pointer;
+
+    if (!node_op) node_op = GetExpression (context);
+    if (!node_op) context->pointer = old_pointer;
+
+    node_ret->left = node_op;
+
+    return node_ret;
 }
 //==================================================================
 node* GetComparison (Context_parser* context)
@@ -921,7 +957,7 @@ const char* WriteTypeNode (type_t type)
 
     return 0;
 }
-//==================================================================================================
+//==================================================================
 const char* WriteValue (Language* language, node* node)
 {
     char* buffer = (char*) calloc (512, sizeof (char));
@@ -961,7 +997,7 @@ const char* WriteValue (Language* language, node* node)
 
     return 0;
 }
-//==================================================================================================
+//==================================================================
 const char* WriteOP (operations op_code)
 {
     switch (op_code)
@@ -1062,7 +1098,7 @@ const char* WriteOP (operations op_code)
 
     return 0;
 }
-//==================================================================================================
+//==================================================================
 const char* WriteNameTableID (type_id type_id)
 {
     switch (type_id)
@@ -1083,4 +1119,4 @@ const char* WriteNameTableID (type_id type_id)
             return 0;
     }
 }
-//==================================================================================================
+//==================================================================

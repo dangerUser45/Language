@@ -1,17 +1,23 @@
 Breakfast:
 
-damir cringe
-yura norm
-
-var norm
-
-Yura _ 4 _ norm
-
-Yura _ n skip  _
+FactorialFunc _ n skip _
 want-millpops
-    x cringe
-    n yes-yes 5
-    var norm
+
+    i norm
+    i yes-yes 0.0
+
+    sum norm
+    sum yes-yes 0.0
+
+    golubino-shpioniro i < n
+    want-millpops
+        sum yes-yes sum  +vibe 1.0
+
+        i yes-yes i +vibe 1
+    dirty
+
+    tralalelo-tralala sum
+
 dirty
 
 DIYA-kontora...

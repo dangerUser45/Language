@@ -1,51 +1,65 @@
 {FILLER:"ACTION"
-	{FILLER:"DECLARE ID"
-		{ID:GLOBAL:"damir"}
-	}
-	{FILLER:"ACTION"
-		{FILLER:"DECLARE ID"
-			{ID:GLOBAL:"yura"}
-		}
-		{FILLER:"ACTION"
-			{FILLER:"DECLARE ID"
-				{ID:GLOBAL:"var"}
+	{FILLER:"FUNCTION_DEFINITION"
+		{FILLER:"FUNCTION"
+			{ID:FUNCTION:"FactorialFunc"}
+			{FILLER:"PARAM"
+				{ID:PARAM:"n"}
 			}
-			{FILLER:"ACTION"
-				{FILLER:"DECLARE FUNCTION"
-					{ID:FUNCTION:"Yura"}
-					{NUM:"4.000000"}
+		}
+		{FILLER:"OP"
+			{FILLER:"DECLARE ID"
+				{ID:LOCAL:"i"}
+			}
+			{FILLER:"OP"
+				{OP:"yes-yes"
+					{ID:LOCAL:"i"}
+					{NUM:"0.000000"}
 				}
-				{FILLER:"ACTION"
-					{FILLER:"FUNCTION_DEFINITION"
-						{FILLER:"FUNCTION"
-							{ID:FUNCTION:"Yura"}
-							{FILLER:"PARAM"
-								{ID:PARAM:"n"}
-							}
+				{FILLER:"OP"
+					{FILLER:"DECLARE ID"
+						{ID:LOCAL:"sum"}
+					}
+					{FILLER:"OP"
+						{OP:"yes-yes"
+							{ID:LOCAL:"sum"}
+							{NUM:"0.000000"}
 						}
 						{FILLER:"OP"
-							{FILLER:"DECLARE ID"
-								{ID:LOCAL:"x"}
-							}
-							{FILLER:"OP"
-								{OP:"yes-yes"
+							{OP:"golubino-shpioniro"
+								{OP:"<"
+									{ID:LOCAL:"i"}
 									{ID:PARAM:"n"}
-									{NUM:"5.000000"}
 								}
 								{FILLER:"OP"
-									{FILLER:"DECLARE ID"
-										{ID:LOCAL:"var"}
+									{OP:"yes-yes"
+										{ID:LOCAL:"sum"}
+										{OP:"+vibe"
+											{ID:LOCAL:"sum"}
+											{NUM:"1.000000"}
+										}
 									}
-									{FILLER:"RET"
+									{FILLER:"OP"
+										{OP:"yes-yes"
+											{ID:LOCAL:"i"}
+											{OP:"+vibe"
+												{ID:LOCAL:"i"}
+												{NUM:"1.000000"}
+											}
+										}
 									}
+								}
+							}
+							{FILLER:"OP"
+								{OP:"tralalelo-tralala"
+									{ID:LOCAL:"sum"}
 								}
 							}
 						}
 					}
-					{FILLER:"ACTION"
-					}
 				}
 			}
 		}
+	}
+	{FILLER:"ACTION"
 	}
 }

@@ -21,315 +21,415 @@ digraph
 		label = "AST Tree"
 		color = "#f5e6cc"
 
-		subgraph cluster_token_96684190992224
+		subgraph cluster_token_103213527340240
 		{
 			node [fillcolor = "#17e9e0"]
 
 			label = ""
-			elem_token_96684190992224 [label = " { addr: 0x57ef0adc0760 | node type = FILLER | value = \"ACTION\" | node left: 0x57ef0adc0790 | node right: 0x57ef0adc07c0 } "]
+			elem_token_103213527340240 [label = " { addr: 0x5ddf45a214d0 | node type = FILLER | value = \"ACTION\" | node left: 0x5ddf45a21500 | node right: 0x5ddf45a21a10 } "]
 			fontsize = 16
 		}
 
-		subgraph cluster_token_96684190992272
+		subgraph cluster_token_103213527340288
 		{
 			node [fillcolor = "#17e9e0"]
 
 			label = ""
-			elem_token_96684190992272 [label = " { addr: 0x57ef0adc0790 | node type = FILLER | value = \"DECLARE ID\" | node left: 0x57ef0ada0590 | node right: (nil) } "]
+			elem_token_103213527340288 [label = " { addr: 0x5ddf45a21500 | node type = FILLER | value = \"FUNCTION_DEFINITION\" | node left: 0x5ddf45a21530 | node right: 0x5ddf45a21590 } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190992224 -> elem_token_96684190992272
-		subgraph cluster_token_96684190992320
+		elem_token_103213527340240 -> elem_token_103213527340288
+		subgraph cluster_token_103213527341584
 		{
 			node [fillcolor = "#17e9e0"]
 
 			label = ""
-			elem_token_96684190992320 [label = " { addr: 0x57ef0adc07c0 | node type = FILLER | value = \"ACTION\" | node left: 0x57ef0adc07f0 | node right: 0x57ef0adc0820 } "]
+			elem_token_103213527341584 [label = " { addr: 0x5ddf45a21a10 | node type = FILLER | value = \"ACTION\" | node left: (nil) | node right: (nil) } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190992224 -> elem_token_96684190992320
-		subgraph cluster_token_96684190860688
+		elem_token_103213527340240 -> elem_token_103213527341584
+		subgraph cluster_token_103213527340336
+		{
+			node [fillcolor = "#17e9e0"]
+
+			label = ""
+			elem_token_103213527340336 [label = " { addr: 0x5ddf45a21530 | node type = FILLER | value = \"FUNCTION\" | node left: 0x5ddf459fc610 | node right: 0x5ddf45a21560 } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527340288 -> elem_token_103213527340336
+		subgraph cluster_token_103213527340432
+		{
+			node [fillcolor = "#17e9e0"]
+
+			label = ""
+			elem_token_103213527340432 [label = " { addr: 0x5ddf45a21590 | node type = FILLER | value = \"OP\" | node left: 0x5ddf45a215f0 | node right: 0x5ddf45a21620 } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527340288 -> elem_token_103213527340432
+		subgraph cluster_token_103213527189008
 		{
 			node [fillcolor = "#a64ac9"]
 
 			label = ""
-			elem_token_96684190860688 [label = " { addr: 0x57ef0ada0590 | node type = ID | value = 0 (\"damir\") | node left: (nil) | node right: (nil) } "]
+			elem_token_103213527189008 [label = " { addr: 0x5ddf459fc610 | node type = ID | value = 0 (\"FactorialFunc\") | node left: (nil) | node right: (nil) } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190992272 -> elem_token_96684190860688
-		subgraph cluster_token_96684190992368
+		elem_token_103213527340336 -> elem_token_103213527189008
+		subgraph cluster_token_103213527340384
 		{
 			node [fillcolor = "#17e9e0"]
 
 			label = ""
-			elem_token_96684190992368 [label = " { addr: 0x57ef0adc07f0 | node type = FILLER | value = \"DECLARE ID\" | node left: 0x57ef0ada05d0 | node right: (nil) } "]
+			elem_token_103213527340384 [label = " { addr: 0x5ddf45a21560 | node type = FILLER | value = \"PARAM\" | node left: 0x5ddf459fc650 | node right: (nil) } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190992320 -> elem_token_96684190992368
-		subgraph cluster_token_96684190992416
-		{
-			node [fillcolor = "#17e9e0"]
-
-			label = ""
-			elem_token_96684190992416 [label = " { addr: 0x57ef0adc0820 | node type = FILLER | value = \"ACTION\" | node left: 0x57ef0adc0850 | node right: 0x57ef0adc0880 } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992320 -> elem_token_96684190992416
-		subgraph cluster_token_96684190860752
+		elem_token_103213527340336 -> elem_token_103213527340384
+		subgraph cluster_token_103213527189072
 		{
 			node [fillcolor = "#a64ac9"]
 
 			label = ""
-			elem_token_96684190860752 [label = " { addr: 0x57ef0ada05d0 | node type = ID | value = 1 (\"yura\") | node left: (nil) | node right: (nil) } "]
+			elem_token_103213527189072 [label = " { addr: 0x5ddf459fc650 | node type = ID | value = 1 (\"n\") | node left: (nil) | node right: (nil) } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190992368 -> elem_token_96684190860752
-		subgraph cluster_token_96684190992464
+		elem_token_103213527340384 -> elem_token_103213527189072
+		subgraph cluster_token_103213527340528
 		{
 			node [fillcolor = "#17e9e0"]
 
 			label = ""
-			elem_token_96684190992464 [label = " { addr: 0x57ef0adc0850 | node type = FILLER | value = \"DECLARE ID\" | node left: 0x57ef0ada0610 | node right: (nil) } "]
+			elem_token_103213527340528 [label = " { addr: 0x5ddf45a215f0 | node type = FILLER | value = \"DECLARE ID\" | node left: 0x5ddf459fc6d0 | node right: (nil) } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190992416 -> elem_token_96684190992464
-		subgraph cluster_token_96684190992512
+		elem_token_103213527340432 -> elem_token_103213527340528
+		subgraph cluster_token_103213527340576
 		{
 			node [fillcolor = "#17e9e0"]
 
 			label = ""
-			elem_token_96684190992512 [label = " { addr: 0x57ef0adc0880 | node type = FILLER | value = \"ACTION\" | node left: 0x57ef0adc08b0 | node right: 0x57ef0adc08e0 } "]
+			elem_token_103213527340576 [label = " { addr: 0x5ddf45a21620 | node type = FILLER | value = \"OP\" | node left: 0x5ddf459fc730 | node right: 0x5ddf45a21680 } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190992416 -> elem_token_96684190992512
-		subgraph cluster_token_96684190860816
+		elem_token_103213527340432 -> elem_token_103213527340576
+		subgraph cluster_token_103213527189200
 		{
 			node [fillcolor = "#a64ac9"]
 
 			label = ""
-			elem_token_96684190860816 [label = " { addr: 0x57ef0ada0610 | node type = ID | value = 2 (\"var\") | node left: (nil) | node right: (nil) } "]
+			elem_token_103213527189200 [label = " { addr: 0x5ddf459fc6d0 | node type = ID | value = 2 (\"i\") | node left: (nil) | node right: (nil) } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190992464 -> elem_token_96684190860816
-		subgraph cluster_token_96684190992560
-		{
-			node [fillcolor = "#17e9e0"]
-
-			label = ""
-			elem_token_96684190992560 [label = " { addr: 0x57ef0adc08b0 | node type = FILLER | value = \"DECLARE FUNCTION\" | node left: 0x57ef0ada0650 | node right: 0x57ef0ada0690 } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992512 -> elem_token_96684190992560
-		subgraph cluster_token_96684190992608
-		{
-			node [fillcolor = "#17e9e0"]
-
-			label = ""
-			elem_token_96684190992608 [label = " { addr: 0x57ef0adc08e0 | node type = FILLER | value = \"ACTION\" | node left: 0x57ef0adc0910 | node right: 0x57ef0adc0b80 } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992512 -> elem_token_96684190992608
-		subgraph cluster_token_96684190860880
-		{
-			node [fillcolor = "#a64ac9"]
-
-			label = ""
-			elem_token_96684190860880 [label = " { addr: 0x57ef0ada0650 | node type = ID | value = 3 (\"Yura\") | node left: (nil) | node right: (nil) } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992560 -> elem_token_96684190860880
-		subgraph cluster_token_96684190860944
-		{
-			node [fillcolor = "#ffb48f"]
-
-			label = ""
-			elem_token_96684190860944 [label = " { addr: 0x57ef0ada0690 | node type = NUM | value = 4.000000 | node left: (nil) | node right: (nil) } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992560 -> elem_token_96684190860944
-		subgraph cluster_token_96684190992656
-		{
-			node [fillcolor = "#17e9e0"]
-
-			label = ""
-			elem_token_96684190992656 [label = " { addr: 0x57ef0adc0910 | node type = FILLER | value = \"FUNCTION_DEFINITION\" | node left: 0x57ef0adc0940 | node right: 0x57ef0adc09a0 } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992608 -> elem_token_96684190992656
-		subgraph cluster_token_96684190993280
-		{
-			node [fillcolor = "#17e9e0"]
-
-			label = ""
-			elem_token_96684190993280 [label = " { addr: 0x57ef0adc0b80 | node type = FILLER | value = \"ACTION\" | node left: (nil) | node right: (nil) } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992608 -> elem_token_96684190993280
-		subgraph cluster_token_96684190992704
-		{
-			node [fillcolor = "#17e9e0"]
-
-			label = ""
-			elem_token_96684190992704 [label = " { addr: 0x57ef0adc0940 | node type = FILLER | value = \"FUNCTION\" | node left: 0x57ef0ada06f0 | node right: 0x57ef0adc0970 } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992656 -> elem_token_96684190992704
-		subgraph cluster_token_96684190992800
-		{
-			node [fillcolor = "#17e9e0"]
-
-			label = ""
-			elem_token_96684190992800 [label = " { addr: 0x57ef0adc09a0 | node type = FILLER | value = \"OP\" | node left: 0x57ef0adc0a00 | node right: 0x57ef0adc0a30 } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992656 -> elem_token_96684190992800
-		subgraph cluster_token_96684190861040
-		{
-			node [fillcolor = "#a64ac9"]
-
-			label = ""
-			elem_token_96684190861040 [label = " { addr: 0x57ef0ada06f0 | node type = ID | value = 4 (\"Yura\") | node left: (nil) | node right: (nil) } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992704 -> elem_token_96684190861040
-		subgraph cluster_token_96684190992752
-		{
-			node [fillcolor = "#17e9e0"]
-
-			label = ""
-			elem_token_96684190992752 [label = " { addr: 0x57ef0adc0970 | node type = FILLER | value = \"PARAM\" | node left: 0x57ef0ada0730 | node right: (nil) } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992704 -> elem_token_96684190992752
-		subgraph cluster_token_96684190861104
-		{
-			node [fillcolor = "#a64ac9"]
-
-			label = ""
-			elem_token_96684190861104 [label = " { addr: 0x57ef0ada0730 | node type = ID | value = 5 (\"n\") | node left: (nil) | node right: (nil) } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992752 -> elem_token_96684190861104
-		subgraph cluster_token_96684190992896
-		{
-			node [fillcolor = "#17e9e0"]
-
-			label = ""
-			elem_token_96684190992896 [label = " { addr: 0x57ef0adc0a00 | node type = FILLER | value = \"DECLARE ID\" | node left: 0x57ef0ada07b0 | node right: (nil) } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992800 -> elem_token_96684190992896
-		subgraph cluster_token_96684190992944
-		{
-			node [fillcolor = "#17e9e0"]
-
-			label = ""
-			elem_token_96684190992944 [label = " { addr: 0x57ef0adc0a30 | node type = FILLER | value = \"OP\" | node left: 0x57ef0ada0810 | node right: 0x57ef0adc0a90 } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992800 -> elem_token_96684190992944
-		subgraph cluster_token_96684190861232
-		{
-			node [fillcolor = "#a64ac9"]
-
-			label = ""
-			elem_token_96684190861232 [label = " { addr: 0x57ef0ada07b0 | node type = ID | value = 6 (\"x\") | node left: (nil) | node right: (nil) } "]
-			fontsize = 16
-		}
-
-		elem_token_96684190992896 -> elem_token_96684190861232
-		subgraph cluster_token_96684190861328
+		elem_token_103213527340528 -> elem_token_103213527189200
+		subgraph cluster_token_103213527189296
 		{
 			node [fillcolor = "#fccd04"]
 
 			label = ""
-			elem_token_96684190861328 [label = " { addr: 0x57ef0ada0810 | node type = OP | value = 10 (\"yes-yes\") | node left: 0x57ef0ada07f0 | node right: 0x57ef0ada0830 } "]
+			elem_token_103213527189296 [label = " { addr: 0x5ddf459fc730 | node type = OP | value = 10 (\"yes-yes\") | node left: 0x5ddf459fc710 | node right: 0x5ddf459fc750 } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190992944 -> elem_token_96684190861328
-		subgraph cluster_token_96684190993040
+		elem_token_103213527340576 -> elem_token_103213527189296
+		subgraph cluster_token_103213527340672
 		{
 			node [fillcolor = "#17e9e0"]
 
 			label = ""
-			elem_token_96684190993040 [label = " { addr: 0x57ef0adc0a90 | node type = FILLER | value = \"OP\" | node left: 0x57ef0adc0af0 | node right: 0x57ef0adc0b50 } "]
+			elem_token_103213527340672 [label = " { addr: 0x5ddf45a21680 | node type = FILLER | value = \"OP\" | node left: 0x5ddf45a216e0 | node right: 0x5ddf45a21710 } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190992944 -> elem_token_96684190993040
-		subgraph cluster_token_96684190861296
+		elem_token_103213527340576 -> elem_token_103213527340672
+		subgraph cluster_token_103213527189264
 		{
 			node [fillcolor = "#a64ac9"]
 
 			label = ""
-			elem_token_96684190861296 [label = " { addr: 0x57ef0ada07f0 | node type = ID | value = 7 (\"n\") | node left: (nil) | node right: (nil) } "]
+			elem_token_103213527189264 [label = " { addr: 0x5ddf459fc710 | node type = ID | value = 3 (\"i\") | node left: (nil) | node right: (nil) } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190861328 -> elem_token_96684190861296
-		subgraph cluster_token_96684190861360
+		elem_token_103213527189296 -> elem_token_103213527189264
+		subgraph cluster_token_103213527189328
 		{
 			node [fillcolor = "#ffb48f"]
 
 			label = ""
-			elem_token_96684190861360 [label = " { addr: 0x57ef0ada0830 | node type = NUM | value = 5.000000 | node left: (nil) | node right: (nil) } "]
+			elem_token_103213527189328 [label = " { addr: 0x5ddf459fc750 | node type = NUM | value = 0.000000 | node left: (nil) | node right: (nil) } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190861328 -> elem_token_96684190861360
-		subgraph cluster_token_96684190993136
+		elem_token_103213527189296 -> elem_token_103213527189328
+		subgraph cluster_token_103213527340768
 		{
 			node [fillcolor = "#17e9e0"]
 
 			label = ""
-			elem_token_96684190993136 [label = " { addr: 0x57ef0adc0af0 | node type = FILLER | value = \"DECLARE ID\" | node left: 0x57ef0ada0850 | node right: (nil) } "]
+			elem_token_103213527340768 [label = " { addr: 0x5ddf45a216e0 | node type = FILLER | value = \"DECLARE ID\" | node left: 0x5ddf459fc770 | node right: (nil) } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190993040 -> elem_token_96684190993136
-		subgraph cluster_token_96684190993232
+		elem_token_103213527340672 -> elem_token_103213527340768
+		subgraph cluster_token_103213527340816
 		{
 			node [fillcolor = "#17e9e0"]
 
 			label = ""
-			elem_token_96684190993232 [label = " { addr: 0x57ef0adc0b50 | node type = FILLER | value = \"RET\" | node left: (nil) | node right: (nil) } "]
+			elem_token_103213527340816 [label = " { addr: 0x5ddf45a21710 | node type = FILLER | value = \"OP\" | node left: 0x5ddf459fc7d0 | node right: 0x5ddf45a21770 } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190993040 -> elem_token_96684190993232
-		subgraph cluster_token_96684190861392
+		elem_token_103213527340672 -> elem_token_103213527340816
+		subgraph cluster_token_103213527189360
 		{
 			node [fillcolor = "#a64ac9"]
 
 			label = ""
-			elem_token_96684190861392 [label = " { addr: 0x57ef0ada0850 | node type = ID | value = 8 (\"var\") | node left: (nil) | node right: (nil) } "]
+			elem_token_103213527189360 [label = " { addr: 0x5ddf459fc770 | node type = ID | value = 4 (\"sum\") | node left: (nil) | node right: (nil) } "]
 			fontsize = 16
 		}
 
-		elem_token_96684190993136 -> elem_token_96684190861392
+		elem_token_103213527340768 -> elem_token_103213527189360
+		subgraph cluster_token_103213527189456
+		{
+			node [fillcolor = "#fccd04"]
+
+			label = ""
+			elem_token_103213527189456 [label = " { addr: 0x5ddf459fc7d0 | node type = OP | value = 10 (\"yes-yes\") | node left: 0x5ddf459fc7b0 | node right: 0x5ddf459fc7f0 } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527340816 -> elem_token_103213527189456
+		subgraph cluster_token_103213527340912
+		{
+			node [fillcolor = "#17e9e0"]
+
+			label = ""
+			elem_token_103213527340912 [label = " { addr: 0x5ddf45a21770 | node type = FILLER | value = \"OP\" | node left: 0x5ddf459fc810 | node right: 0x5ddf45a21920 } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527340816 -> elem_token_103213527340912
+		subgraph cluster_token_103213527189424
+		{
+			node [fillcolor = "#a64ac9"]
+
+			label = ""
+			elem_token_103213527189424 [label = " { addr: 0x5ddf459fc7b0 | node type = ID | value = 5 (\"sum\") | node left: (nil) | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189456 -> elem_token_103213527189424
+		subgraph cluster_token_103213527189488
+		{
+			node [fillcolor = "#ffb48f"]
+
+			label = ""
+			elem_token_103213527189488 [label = " { addr: 0x5ddf459fc7f0 | node type = NUM | value = 0.000000 | node left: (nil) | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189456 -> elem_token_103213527189488
+		subgraph cluster_token_103213527189520
+		{
+			node [fillcolor = "#fccd04"]
+
+			label = ""
+			elem_token_103213527189520 [label = " { addr: 0x5ddf459fc810 | node type = OP | value = 9 (\"golubino-shpioniro\") | node left: 0x5ddf459fc850 | node right: 0x5ddf45a21830 } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527340912 -> elem_token_103213527189520
+		subgraph cluster_token_103213527341344
+		{
+			node [fillcolor = "#17e9e0"]
+
+			label = ""
+			elem_token_103213527341344 [label = " { addr: 0x5ddf45a21920 | node type = FILLER | value = \"OP\" | node left: 0x5ddf459fca10 | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527340912 -> elem_token_103213527341344
+		subgraph cluster_token_103213527189584
+		{
+			node [fillcolor = "#fccd04"]
+
+			label = ""
+			elem_token_103213527189584 [label = " { addr: 0x5ddf459fc850 | node type = OP | value = 24 (\"\<\") | node left: 0x5ddf459fc830 | node right: 0x5ddf459fc870 } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189520 -> elem_token_103213527189584
+		subgraph cluster_token_103213527341104
+		{
+			node [fillcolor = "#17e9e0"]
+
+			label = ""
+			elem_token_103213527341104 [label = " { addr: 0x5ddf45a21830 | node type = FILLER | value = \"OP\" | node left: 0x5ddf459fc8d0 | node right: 0x5ddf45a21890 } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189520 -> elem_token_103213527341104
+		subgraph cluster_token_103213527189552
+		{
+			node [fillcolor = "#a64ac9"]
+
+			label = ""
+			elem_token_103213527189552 [label = " { addr: 0x5ddf459fc830 | node type = ID | value = 6 (\"i\") | node left: (nil) | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189584 -> elem_token_103213527189552
+		subgraph cluster_token_103213527189616
+		{
+			node [fillcolor = "#a64ac9"]
+
+			label = ""
+			elem_token_103213527189616 [label = " { addr: 0x5ddf459fc870 | node type = ID | value = 7 (\"n\") | node left: (nil) | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189584 -> elem_token_103213527189616
+		subgraph cluster_token_103213527189712
+		{
+			node [fillcolor = "#fccd04"]
+
+			label = ""
+			elem_token_103213527189712 [label = " { addr: 0x5ddf459fc8d0 | node type = OP | value = 10 (\"yes-yes\") | node left: 0x5ddf459fc8b0 | node right: 0x5ddf459fc910 } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527341104 -> elem_token_103213527189712
+		subgraph cluster_token_103213527341200
+		{
+			node [fillcolor = "#17e9e0"]
+
+			label = ""
+			elem_token_103213527341200 [label = " { addr: 0x5ddf45a21890 | node type = FILLER | value = \"OP\" | node left: 0x5ddf459fc970 | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527341104 -> elem_token_103213527341200
+		subgraph cluster_token_103213527189680
+		{
+			node [fillcolor = "#a64ac9"]
+
+			label = ""
+			elem_token_103213527189680 [label = " { addr: 0x5ddf459fc8b0 | node type = ID | value = 8 (\"sum\") | node left: (nil) | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189712 -> elem_token_103213527189680
+		subgraph cluster_token_103213527189776
+		{
+			node [fillcolor = "#fccd04"]
+
+			label = ""
+			elem_token_103213527189776 [label = " { addr: 0x5ddf459fc910 | node type = OP | value = 1 (\"+vibe\") | node left: 0x5ddf459fc8f0 | node right: 0x5ddf459fc930 } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189712 -> elem_token_103213527189776
+		subgraph cluster_token_103213527189744
+		{
+			node [fillcolor = "#a64ac9"]
+
+			label = ""
+			elem_token_103213527189744 [label = " { addr: 0x5ddf459fc8f0 | node type = ID | value = 9 (\"sum\") | node left: (nil) | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189776 -> elem_token_103213527189744
+		subgraph cluster_token_103213527189808
+		{
+			node [fillcolor = "#ffb48f"]
+
+			label = ""
+			elem_token_103213527189808 [label = " { addr: 0x5ddf459fc930 | node type = NUM | value = 1.000000 | node left: (nil) | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189776 -> elem_token_103213527189808
+		subgraph cluster_token_103213527189872
+		{
+			node [fillcolor = "#fccd04"]
+
+			label = ""
+			elem_token_103213527189872 [label = " { addr: 0x5ddf459fc970 | node type = OP | value = 10 (\"yes-yes\") | node left: 0x5ddf459fc950 | node right: 0x5ddf459fc9b0 } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527341200 -> elem_token_103213527189872
+		subgraph cluster_token_103213527189840
+		{
+			node [fillcolor = "#a64ac9"]
+
+			label = ""
+			elem_token_103213527189840 [label = " { addr: 0x5ddf459fc950 | node type = ID | value = 10 (\"i\") | node left: (nil) | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189872 -> elem_token_103213527189840
+		subgraph cluster_token_103213527189936
+		{
+			node [fillcolor = "#fccd04"]
+
+			label = ""
+			elem_token_103213527189936 [label = " { addr: 0x5ddf459fc9b0 | node type = OP | value = 1 (\"+vibe\") | node left: 0x5ddf459fc990 | node right: 0x5ddf459fc9d0 } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189872 -> elem_token_103213527189936
+		subgraph cluster_token_103213527189904
+		{
+			node [fillcolor = "#a64ac9"]
+
+			label = ""
+			elem_token_103213527189904 [label = " { addr: 0x5ddf459fc990 | node type = ID | value = 11 (\"i\") | node left: (nil) | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189936 -> elem_token_103213527189904
+		subgraph cluster_token_103213527189968
+		{
+			node [fillcolor = "#ffb48f"]
+
+			label = ""
+			elem_token_103213527189968 [label = " { addr: 0x5ddf459fc9d0 | node type = NUM | value = 1.000000 | node left: (nil) | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527189936 -> elem_token_103213527189968
+		subgraph cluster_token_103213527190032
+		{
+			node [fillcolor = "#fccd04"]
+
+			label = ""
+			elem_token_103213527190032 [label = " { addr: 0x5ddf459fca10 | node type = OP | value = 30 (\"tralalelo-tralala\") | node left: 0x5ddf459fca30 | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527341344 -> elem_token_103213527190032
+		subgraph cluster_token_103213527190064
+		{
+			node [fillcolor = "#a64ac9"]
+
+			label = ""
+			elem_token_103213527190064 [label = " { addr: 0x5ddf459fca30 | node type = ID | value = 12 (\"sum\") | node left: (nil) | node right: (nil) } "]
+			fontsize = 16
+		}
+
+		elem_token_103213527190032 -> elem_token_103213527190064
 		
 	}
 }

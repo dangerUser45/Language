@@ -1,0 +1,16 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-I./include/",
+      "-I.include/",
+      "-O3",
+      "-DNDEBUG",
+      "-c",
+      "-o",
+      "build/LanguageCtorDtor.o",
+      "src/LanguageCtorDtor.cpp"
+    ],
+    "directory": "/home/danek/Projects/Language/libs/"
+  }
+]
