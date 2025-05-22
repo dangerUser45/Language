@@ -3,18 +3,18 @@
 
 Grammar            :: = 'Breakfast:' {FunctionDefinition | DeclareFunction | DeclareID}+ 'end'
 
-FunctionDefinition :: = ID '_' Number '_' Body
+FunctionDefinition :: = ID '_' {ID skip}* '_' Body
 
-Assignment         :: = ID 'yes-yes' Expression | ID
+Assignment         :: = ID 'yes-yes' CallFunction | Expression
 
-If                 :: = Comparison { ['and' | 'or'] Comparison}* 'double-yummy' Body
-While              :: = 'golubino-shpioniro' Comparison { ['and' | 'or'] Comparison}* Body
+If                 :: = Comparison 'double-yummy' Body
+While              :: = 'golubino-shpioniro' Comparison  Body
 
-Comparison         :: = Expression ['<'| '<=' | '!=' | '==' | '>=' | '>'] Expression
+Comparison         :: = CallFunction | Expression ['<'| '<=' | '!=' | '==' | '>=' | '>']  CallFunction | Expression
 
 Body               :: = 'want-millpops' { CallFunction | If | While| Assignment | DeclareID }+ 'dirty'
 
-CallFunction       :: = ID '(' {Expression skip}* ')' 'norm' | 'skip'
+CallFunction       :: = ID '(' {Expression | CallFunction skip}* ')' 'norm' | 'cringe'
 DeclareFunction    :: = ID '_' Number '_' ['norm' | 'cringe']
 DeclareID          :: = ID ['norm' | 'cringe']
 

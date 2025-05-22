@@ -11,3 +11,5 @@ inline const char* FILLER_COLOR = "#17e9e0";
 
 void LanguageDump   (Language* language);
 void LanguageGraphDump (Language* language);
+
+const char* GetValue (Language* language, node* node);

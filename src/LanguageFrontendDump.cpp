@@ -19,7 +19,6 @@ void CreateFrontendDotContext (Language* language);
 
 static const char* GetColor (type_t type);
 static const char* GetTypeNode (type_t type);
-static const char* GetValue (Language* language, node* node);
 static const char* GetOP (operations op_code);
 
 static ERRORS ConsoleCommandCallDot (PRINT_OBJ object);
@@ -118,13 +117,15 @@ void LanguageGraphDump (Language* language)
 
     if (language->parent_node != NULL )
     {
+        z(language->parent_node, p)
         language_graphviz_file = freopen (NAME_LANGUAGE_GRAPHVIZ_FILE, "w", language_graphviz_file);
         setvbuf      (language_log_file, NULL, _IONBF, 0);  // Отключение буферизации
         setvbuf (language_graphviz_file, NULL, _IONBF, 0);  // Отключение буферизации
 
-        PrintAST_Tree (language);
-        ConsoleCommandCallDot (TREE);
-        LanguageAddImages (TREE);
+        zz
+        PrintAST_Tree (language); zz
+        ConsoleCommandCallDot (TREE); zz
+        LanguageAddImages (TREE); zz
     }
 }
 //==================================================================================================
@@ -472,22 +473,16 @@ const char* GetOP (operations op_code)
             return "!=";
 
         case LESS:
-            return "<";
+            return "\\<";
 
         case LESS_OR_EQUALE:
-            return "<=";
+            return "\\<=";
 
         case MORE:
-            return ">";
+            return "\\>";
 
         case MORE_OR_EQUAL:
-            return ">=";
-
-        case BEGIN_PARAM_FUNC:
-            return "";
-
-        case END_PARAM_FUNC:
-            return "";
+            return "\\>=";
 
         case COMMENTS:
             return "|skip:";
@@ -495,11 +490,8 @@ const char* GetOP (operations op_code)
         case PARAM_ENVIRONMENT:
             return "_";
 
-        case AND:
-            return "and";
-
-        case OR:
-            return "or";
+        case RETURN:
+            return "tralalelo-tralala";
 
         default:
             return 0;

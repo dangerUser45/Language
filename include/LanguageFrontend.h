@@ -13,6 +13,8 @@ inline const char* NAME_LANGUAGE_GRAPHVIZ_FILE = "dump/Graphviz_dot/Frontend_gra
 
 typedef double val_t;
 enum type_t {NUM = 1, ID, OP, FILLER};
+enum type_variable {GLOBAL = 1, LOCAL, FUNCTION};
+enum body_type {FUNC = 1, NO_FUNC};
 
 const int MAX_NAME_ID = 256;
 enum operations
@@ -50,13 +52,9 @@ enum operations
     MORE                    = 26,
     MORE_OR_EQUAL           = 27,
 
-    BEGIN_PARAM_FUNC        = 28,
-    END_PARAM_FUNC          = 29,
-
-    COMMENTS                = 30,
-    PARAM_ENVIRONMENT       = 31,
-    AND                     = 32,
-    OR                      = 33,
+    COMMENTS                = 28,
+    PARAM_ENVIRONMENT       = 29,
+    RETURN                  = 30,
 };
 
 union VALUE
@@ -78,6 +76,7 @@ struct node
 struct NAME_TABLE
 {
     char name_id [MAX_NAME_ID];
+    type_variable type;
 };
 
 struct Language
@@ -103,6 +102,7 @@ struct Key_word
 
 struct Context_parser
 {
+    Language* language;
     node* token_array;
     size_t pointer;
 };

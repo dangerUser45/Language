@@ -20,7 +20,7 @@
     #define DBG( ... )
 #endif
 
-#define z(var, specifier) {fprintf (stderr, BLUE #var " = %" #specifier RESET "\n", var);}
+#define z(var, specifier) {fprintf (stderr, BLUE "%s:%d: " #var " = %" #specifier RESET "\n", __FILE__, __LINE__, var);}
 #define zz {fprintf (stderr, "%s:%d\n", __FILE__, __LINE__);}
 
 
